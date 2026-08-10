@@ -153,13 +153,13 @@
       <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl shadow-slate-900/5 relative overflow-hidden" data-aos="fade-up" data-aos-duration="1000">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          <!-- Interactive Voice Core Avatar with Embedded Text Inside Box -->
+          <!-- Interactive Voice Core Avatar with Dynamic Embedded Text -->
           <div class="lg:col-span-4 flex flex-col items-center justify-center" data-aos="zoom-in" data-aos-duration="1200" data-aos-delay="200">
             <div class="relative group cursor-pointer" onclick="toggleSahilAgent()">
               <!-- Multi-color glowing aura backing -->
               <div class="absolute -inset-3 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-60 blur-xl group-hover:opacity-95 transition duration-700 animate-spin" style="animation-duration: 15s;"></div>
               
-              <!-- Outer Container with Smooth Cubical-to-Circle Transition -->
+              <!-- Outer Container with Smooth Morphing and Reset -->
               <div id="jarvis-outer" class="relative w-56 h-56 sm:w-64 sm:h-64 rounded-[32px] bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-900 flex flex-col items-center justify-center p-6 text-center border-4 border-white/90 shadow-2xl overflow-hidden select-none transition-all duration-700 ease-in-out">
                 
                 <!-- Holographic Grid Layer -->
@@ -169,20 +169,20 @@
                   <div class="absolute left-1/2 inset-y-0 w-px bg-gradient-to-b from-transparent via-purple-300 to-transparent"></div>
                 </div>
 
-                <!-- Embedded Initial Prompt Content Inside Box -->
+                <!-- Dynamic Content Inside Box -->
                 <div id="box-content" class="relative z-10 flex flex-col items-center justify-center transition-all duration-500">
-                  <div class="w-10 h-10 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-white shadow-lg">
-                    <span class="text-base">🎙️</span>
+                  <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-white shadow-lg">
+                    <i data-lucide="mic" class="w-6 h-6 text-indigo-300"></i>
                   </div>
                   <h3 class="text-white font-extrabold text-sm sm:text-base tracking-wider uppercase mb-1">
-                    Ask for Sahil
+                    ASK FOR SAHIL
                   </h3>
                   <p id="voiceStatusText" class="text-indigo-200 text-xs font-medium">
                     Click here to talk to Sahil
                   </p>
                 </div>
 
-                <!-- Inner Element / Core Dot -->
+                <!-- Inner Element / Core Dot when Active -->
                 <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-700" id="jarvis-core-indicator">
                   <div id="jarvis-inner" class="relative w-28 h-28 rounded-[20px] border border-indigo-300/50 bg-gradient-to-tr from-indigo-600/30 to-pink-600/30 backdrop-blur-sm transition-all duration-700 ease-in-out flex items-center justify-center shadow-inner">
                     <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)] animate-pulse"></div>
@@ -784,9 +784,9 @@
 
   <!-- SAHIL AI VOICE AGENT CORE SCRIPT -->
   <script>
+    let isAgentActive = false;
     let isAgentListening = false;
     let isAgentProcessing = false;
-    let hasAgentGreeted = false;
     let sahilRecognition;
     let sahilHistory = [];
     let sahilVoices = [];
@@ -822,35 +822,57 @@
         const transcript = event.results[lastIndex][0].transcript.trim();
         if (!transcript) return;
 
-        stopSahilListening();
+        stopSahilListeningState();
         await sendQueryToSahilBackend(transcript);
       };
 
-      sahilRecognition.onerror = () => { stopSahilListening(); };
+      sahilRecognition.onerror = () => { stopSahilListeningState(); };
     }
 
     function toggleSahilAgent() {
       const boxContent = document.getElementById('box-content');
       const coreIndicator = document.getElementById('jarvis-core-indicator');
 
-      if (!hasAgentGreeted) {
-        // Fade out box text content and reveal voice core indicator
+      if (!isAgentActive) {
+        // Activate Agent
+        isAgentActive = true;
         if (boxContent) boxContent.style.opacity = '0';
         setTimeout(() => {
           if (boxContent) boxContent.style.display = 'none';
           if (coreIndicator) coreIndicator.style.opacity = '1';
         }, 300);
 
-        hasAgentGreeted = true;
         const greeting = "Hey there! I'm Sahil Kumar. Welcome to my portfolio—what high-converting design or video project are we working on today?";
         sahilHistory.push({ role: 'model', text: greeting });
         speakSahilReply(greeting);
       } else {
-        if (isAgentListening) {
-          stopSahilListening();
-        } else {
-          startSahilListening();
-        }
+        // Deactivate Agent & Smoothly Restore Initial State
+        isAgentActive = false;
+        stopSahilListeningState();
+        window.speechSynthesis.cancel();
+
+        if (coreIndicator) coreIndicator.style.opacity = '0';
+        setTimeout(() => {
+          if (boxContent) {
+            boxContent.style.display = 'flex';
+            // Reset to original initial text & styling as requested
+            boxContent.innerHTML = `
+              <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-white shadow-lg">
+                <i data-lucide="mic" class="w-6 h-6 text-indigo-300"></i>
+              </div>
+              <h3 class="text-white font-extrabold text-sm sm:text-base tracking-wider uppercase mb-1">
+                ASK FOR SAHIL
+              </h3>
+              <p id="voiceStatusText" class="text-indigo-200 text-xs font-medium">
+                Click here to talk to Sahil
+              </p>
+            `;
+            lucide.createIcons();
+            setTimeout(() => { boxContent.style.opacity = '1'; }, 50);
+          }
+        }, 300);
+
+        setCubicalState();
       }
     }
 
@@ -882,24 +904,26 @@
       setCubicalState();
     }
 
-    function startSahilListening() {
+    function startSahilListeningState() {
+      if (!isAgentActive) return;
       isAgentListening = true;
       isAgentProcessing = false;
       const statusText = document.getElementById('voiceStatusText');
-      if (statusText) statusText.innerText = 'Listening to you...';
+      if (statusText) statusText.innerText = 'You talk...';
       startVoiceMorphAnimation();
       try { sahilRecognition.start(); } catch(e){}
     }
 
-    function stopSahilListening() {
+    function stopSahilListeningState() {
       isAgentListening = false;
       stopVoiceMorphAnimation();
     }
 
     async function sendQueryToSahilBackend(userText) {
+      if (!isAgentActive) return;
       isAgentProcessing = true;
       const statusText = document.getElementById('voiceStatusText');
-      if (statusText) statusText.innerText = 'Sahil is thinking...';
+      if (statusText) statusText.innerText = 'Thinking...';
 
       try {
         const response = await fetch('/api/chat', {
@@ -913,18 +937,19 @@
         });
 
         const data = await response.json();
-        if (data.reply) {
+        if (data.reply && isAgentActive) {
           sahilHistory.push({ role: 'user', text: userText });
           sahilHistory.push({ role: 'model', text: data.reply });
           speakSahilReply(data.reply);
         }
       } catch (err) {
         isAgentProcessing = false;
-        startSahilListening();
+        if (isAgentActive) startSahilListeningState();
       }
     }
 
     function speakSahilReply(text) {
+      if (!isAgentActive) return;
       const statusText = document.getElementById('voiceStatusText');
       if (statusText) statusText.innerText = 'Sahil is speaking...';
       window.speechSynthesis.cancel();
@@ -952,7 +977,9 @@
       const onAudioEnd = () => {
         isAgentProcessing = false;
         stopVoiceMorphAnimation();
-        startSahilListening();
+        if (isAgentActive) {
+          startSahilListeningState();
+        }
       };
 
       utterance.onend = onAudioEnd;
