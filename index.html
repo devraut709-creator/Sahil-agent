@@ -133,7 +133,7 @@
       </div>
 
       <p class="mt-6 text-base sm:text-xl lg:text-2xl text-slate-600 max-w-3xl font-light leading-relaxed" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-        Crafting <span class="font-semibold text-indigo-600">High-CTR Visuals</span>, <span class="font-semibold text-purple-600">Hyper-Realistic AI Concepts</span> & <span class="font-semibold text-pink-600">High-Engagement Motion Edits</span>.
+        Crafting <span class="font-semibold text-indigo-600">High-CTR Visuals</span>, <span class="font-semibold text-purple-600">Hyper-Realistic AI Concepts</span> & <span class="font-semibold text-pink-600">High-Engagement Motion Edits</span>[cite: 1].
       </p>
 
       <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-sm sm:max-w-none" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
@@ -203,7 +203,7 @@
             </h2>
             
             <p class="mt-4 text-slate-600 leading-relaxed text-base sm:text-lg">
-              Specializing in full-spectrum visual content creation. Transforming raw narrative ideas into high-converting YouTube thumbnails, immersive motion graphics, and hyper-realistic AI promotional posters designed to captivate audience attention.
+              Specializing in full-spectrum visual content creation. Transforming raw narrative ideas into high-converting YouTube thumbnails, immersive motion graphics, and hyper-realistic AI promotional posters designed to captivate audience attention[cite: 1].
             </p>
 
             <div class="mt-6 flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-3">
@@ -233,7 +233,7 @@
           Featured Works
         </h2>
         <p class="mt-4 text-slate-600 text-base sm:text-lg">
-          Filter through motion graphics, YouTube thumbnails, and AI concept artwork.
+          Filter through motion graphics, YouTube thumbnails, and AI concept artwork[cite: 1].
         </p>
 
         <div class="mt-8 flex flex-wrap justify-center gap-2 p-1.5 rounded-2xl bg-slate-200/70 max-w-fit mx-auto">
@@ -507,7 +507,7 @@
           Capabilities & Toolkit
         </h2>
         <p class="mt-4 text-slate-600 text-base sm:text-lg">
-          Powered by state-of-the-art AI creative engines, professional video pacing, and clean design standards.
+          Powered by state-of-the-art AI creative engines, professional video pacing, and clean design standards[cite: 1].
         </p>
       </div>
 
@@ -938,31 +938,25 @@
           sahilHistory.push({ role: 'user', text: userText });
           sahilHistory.push({ role: 'model', text: data.reply });
           
-          // Ultra-Robust Intent & Navigation Parser (Handles multi-lingual / indirect phrasings seamlessly)
+          // FULLY AUTOMATED INTENT & NAVIGATION PARSER (No confirm popup, direct smooth scroll)
           const lowerUserQuery = userText.toLowerCase();
-          const lowerReply = data.reply.toLowerCase();
 
-          const isCapIntent = lowerUserQuery.includes('capabilities') || lowerUserQuery.includes('capability') || lowerUserQuery.includes('toolkit') || lowerUserQuery.includes('skills') || lowerUserQuery.includes('page') && (lowerUserQuery.includes('cap') || lowerUserQuery.includes('केपेबिलिटीज'));
-          const isIdIntent = lowerUserQuery.includes('identity') || lowerUserQuery.includes('about') || lowerUserQuery.includes('profile') || lowerUserQuery.includes('intro') || lowerUserQuery.includes('परिचय');
-          const isShowcaseIntent = lowerUserQuery.includes('showcase') || lowerUserQuery.includes('poster') || lowerUserQuery.includes('thumbnail') || lowerUserQuery.includes('video') || lowerUserQuery.includes('works') || lowerUserQuery.includes('डिजाइन') || lowerUserQuery.includes('पोस्टर');
+          const isCapIntent = lowerUserQuery.includes('capabilities') || lowerUserQuery.includes('capability') || lowerUserQuery.includes('toolkit') || lowerUserQuery.includes('skills') || lowerUserQuery.includes('cap') || lowerUserQuery.includes('केपेबिलिटीज');
+          const isIdIntent = lowerUserQuery.includes('identity') || lowerUserQuery.includes('about') || lowerUserQuery.includes('profile') || lowerUserQuery.includes('intro') || lowerUserQuery.includes('परिचय') || lowerUserQuery.includes('बारे');
+          const isShowcaseIntent = lowerUserQuery.includes('showcase') || lowerUserQuery.includes('poster') || lowerUserQuery.includes('thumbnail') || lowerUserQuery.includes('video') || lowerUserQuery.includes('works') || lowerUserQuery.includes('डिजाइन') || lowerUserQuery.includes('पोस्टर') || lowerUserQuery.includes('काम');
           const isHomeIntent = lowerUserQuery.includes('home') || lowerUserQuery.includes('main') || lowerUserQuery.includes('top') || lowerUserQuery.includes('होमपेज') || lowerUserQuery.includes('शुरुआत');
+          const isConnectIntent = lowerUserQuery.includes('connect') || lowerUserQuery.includes('contact') || lowerUserQuery.includes('message') || lowerUserQuery.includes('whatsapp') || lowerUserQuery.includes('कंटेक्ट') || lowerUserQuery.includes('मैसेज');
 
-          if (isCapIntent || lowerReply.includes('capabilities')) {
-            if (confirm("Would you like me to take you directly to the Capabilities section?")) {
-              document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
-            }
-          } else if (isIdIntent || lowerReply.includes('identity') || lowerReply.includes('about')) {
-            if (confirm("Would you like me to scroll up to the Identity section?")) {
-              document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-            }
-          } else if (isShowcaseIntent || lowerReply.includes('showcase')) {
-            if (confirm("Would you like me to take you to the Showcase section?")) {
-              document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
-            }
+          if (isCapIntent) {
+            document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
+          } else if (isIdIntent) {
+            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+          } else if (isShowcaseIntent) {
+            document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
+          } else if (isConnectIntent) {
+            document.getElementById('connect').scrollIntoView({ behavior: 'smooth' });
           } else if (isHomeIntent) {
-            if (confirm("Would you like me to take you to the top of the homepage?")) {
-              document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
-            }
+            document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
           }
 
           speakSahilReply(data.reply);
