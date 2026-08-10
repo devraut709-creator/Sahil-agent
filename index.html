@@ -1,788 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio | Sahil Kumar</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- Custom Google Font: Outfit -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <!-- AOS (Animate on Scroll) Library -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Outfit', 'sans-serif'],
-          },
-          animation: {
-            'blob-pulse': 'blob 10s infinite ease-in-out',
-            'float': 'float 6s ease-in-out infinite',
-            'earth-spin': 'earthSpin 25s linear infinite',
-          },
-          keyframes: {
-            blob: {
-              '0%, 100%': { transform: 'scale(1) translate(0px, 0px)' },
-              '50%': { transform: 'scale(1.15) translate(20px, -20px)' },
-            },
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-10px)' },
-            },
-            earthSpin: {
-              '0%': { transform: 'rotate(0deg)' },
-              '100%': { transform: 'rotate(360deg)' },
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    .no-select {
-      user-select: none;
-      -webkit-user-select: none;
-    }
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(229, 231, 235, 0.8);
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f5f9;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 3px;
-    }
-  </style>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen relative overflow-x-hidden">
-
-  <!-- BACKGROUND GLOW ORBS -->
-  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-    <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[350px] sm:w-[600px] lg:w-[800px] h-[350px] sm:h-[600px] lg:h-[800px] rounded-full bg-gradient-to-tr from-indigo-300/40 via-purple-300/40 to-pink-300/40 blur-[90px] lg:blur-[130px] animate-blob-pulse"></div>
-    <div class="absolute top-[40%] left-[-10%] w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] rounded-full bg-gradient-to-br from-blue-200/40 to-indigo-200/40 blur-[80px] animate-float"></div>
-    <div class="absolute bottom-[5%] right-[-10%] w-[350px] sm:w-[550px] h-[350px] sm:h-[550px] rounded-full bg-gradient-to-tl from-purple-200/40 to-pink-200/40 blur-[90px] animate-blob-pulse"></div>
-  </div>
-
-  <!-- NAVIGATION BAR -->
-  <header class="fixed top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none" data-aos="fade-down" data-aos-duration="1000">
-    <nav class="pointer-events-auto glass-nav rounded-full px-4 sm:px-6 py-2.5 shadow-lg shadow-indigo-950/5 flex items-center justify-between gap-6 sm:gap-10 transition-all duration-300 hover:shadow-xl">
-      <a href="#hero" class="text-xs font-black tracking-widest text-indigo-600 uppercase transition-opacity hover:opacity-80">
-        SK
-      </a>
-      <div class="flex items-center gap-1 sm:gap-2">
-        <a href="#about" class="p-2 sm:px-3 sm:py-1.5 rounded-full text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/80 transition-all flex items-center gap-1.5 text-xs sm:text-sm font-medium" title="Identity">
-          <i data-lucide="user" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">Identity</span>
-        </a>
-        <a href="#showcase" class="p-2 sm:px-3 sm:py-1.5 rounded-full text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/80 transition-all flex items-center gap-1.5 text-xs sm:text-sm font-medium" title="Showcase">
-          <i data-lucide="layout-grid" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">Showcase</span>
-        </a>
-        <a href="#capabilities" class="p-2 sm:px-3 sm:py-1.5 rounded-full text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/80 transition-all flex items-center gap-1.5 text-xs sm:text-sm font-medium" title="Capabilities">
-          <i data-lucide="cpu" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">Capabilities</span>
-        </a>
-        <a href="#connect" class="p-2 sm:px-3 sm:py-1.5 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-all flex items-center gap-1.5 text-xs sm:text-sm font-medium shadow-md shadow-indigo-600/20" title="Connect">
-          <i data-lucide="send" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">Connect</span>
-        </a>
-      </div>
-    </nav>
-  </header>
-
-  <!-- MAIN CONTENT CONTAINER -->
-  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-    <!-- HERO SECTION -->
-    <section id="hero" class="min-h-screen flex flex-col justify-center items-center text-center pt-24 pb-12">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-slate-200/80 shadow-sm text-xs font-semibold text-slate-700 mb-8" data-aos="fade-down" data-aos-duration="1000">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-        <span>Available for Select Projects & Roles</span>
-      </div>
-
-      <div class="h-20 sm:h-32 md:h-40 lg:h-48 flex items-center justify-center w-full max-w-5xl overflow-hidden px-2" data-aos="zoom-in" data-aos-duration="1200">
-        <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight">
-          PORTFOLIO BY
-        </h1>
-      </div>
-
-      <p class="mt-6 text-base sm:text-xl lg:text-2xl text-slate-600 max-w-3xl font-light leading-relaxed" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-        Crafting <span class="font-semibold text-indigo-600">High-CTR Visuals</span>, <span class="font-semibold text-purple-600">Hyper-Realistic AI Concepts</span> & <span class="font-semibold text-pink-600">High-Engagement Motion Edits</span>.
-      </p>
-
-      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-sm sm:max-w-none" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-        <a href="#showcase" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/35 transition-all flex items-center justify-center gap-2 group">
-          <span>Explore Showcase</span>
-          <i data-lucide="arrow-down" class="w-4 h-4 transition-transform group-hover:translate-y-1"></i>
-        </a>
-        <a href="#connect" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 font-semibold text-sm shadow-sm transition-all flex items-center justify-center gap-2">
-          <span>Get in Touch</span>
-          <i data-lucide="message-square" class="w-4 h-4 text-slate-500"></i>
-        </a>
-      </div>
-    </section>
-
-    <!-- IDENTITY SECTION WITH STRICT AGENT -->
-    <section id="about" class="py-20 scroll-mt-24">
-      <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl shadow-slate-900/5 relative overflow-hidden" data-aos="fade-up" data-aos-duration="1000">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          <!-- Interactive Voice Core Avatar -->
-          <div class="lg:col-span-4 flex flex-col items-center justify-center" data-aos="zoom-in" data-aos-duration="1200" data-aos-delay="200">
-            <div class="relative group cursor-pointer" onclick="toggleSahilAgent()">
-              <!-- Multi-color glowing aura backing -->
-              <div class="absolute -inset-3 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-60 blur-xl group-hover:opacity-95 transition duration-700 animate-spin" style="animation-duration: 15s;"></div>
-              
-              <!-- Outer Container with Morphing & Smooth Navigation -->
-              <div id="jarvis-outer" class="relative w-56 h-56 sm:w-64 sm:h-64 rounded-[32px] bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-900 flex flex-col items-center justify-center p-6 text-center border-4 border-white/90 shadow-2xl overflow-hidden select-none transition-all duration-700 ease-in-out">
-                
-                <!-- Holographic Grid Layer -->
-                <div class="absolute inset-0 opacity-30 pointer-events-none animate-earth-spin">
-                  <div class="absolute inset-2 rounded-full border border-dashed border-indigo-400/40"></div>
-                  <div class="absolute top-1/2 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-300 to-transparent"></div>
-                  <div class="absolute left-1/2 inset-y-0 w-px bg-gradient-to-b from-transparent via-purple-300 to-transparent"></div>
-                </div>
-
-                <!-- Dynamic Content Inside Box -->
-                <div id="box-content" class="relative z-10 flex flex-col items-center justify-center transition-all duration-500">
-                  <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-white shadow-lg">
-                    <i data-lucide="mic" class="w-6 h-6 text-indigo-300"></i>
-                  </div>
-                  <h3 class="text-white font-extrabold text-sm sm:text-base tracking-wider uppercase mb-1">
-                    ASK FOR SAHIL
-                  </h3>
-                  <p id="voiceStatusText" class="text-indigo-200 text-xs font-medium">
-                    Click here to talk to Sahil
-                  </p>
-                </div>
-
-                <!-- Inner Element / Core Dot when Active -->
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-700" id="jarvis-core-indicator">
-                  <div id="jarvis-inner" class="relative w-28 h-28 rounded-[20px] border border-indigo-300/50 bg-gradient-to-tr from-indigo-600/30 to-pink-600/30 backdrop-blur-sm transition-all duration-700 ease-in-out flex items-center justify-center shadow-inner">
-                    <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)] animate-pulse"></div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <!-- Text Column -->
-          <div class="lg:col-span-8 text-center lg:text-left" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="300">
-            <div class="inline-block px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-semibold text-xs uppercase tracking-wider mb-3">
-              Creator & Visual Specialist
-            </div>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
-              Sahil Kumar
-            </h2>
-            
-            <p class="mt-4 text-slate-600 leading-relaxed text-base sm:text-lg">
-              Specializing in full-spectrum visual content creation. Transforming raw narrative ideas into high-converting YouTube thumbnails, immersive motion graphics, and hyper-realistic AI promotional posters designed to captivate audience attention.
-            </p>
-
-            <div class="mt-6 flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-3">
-              <span class="px-4 py-2 rounded-xl bg-white/80 border border-slate-200 text-slate-800 font-semibold text-xs sm:text-sm shadow-sm flex items-center gap-1.5">
-                <i data-lucide="video" class="w-4 h-4 text-indigo-600"></i>
-                Motion Video Editing
-              </span>
-              <span class="px-4 py-2 rounded-xl bg-white/80 border border-slate-200 text-slate-800 font-semibold text-xs sm:text-sm shadow-sm flex items-center gap-1.5">
-                <i data-lucide="image" class="w-4 h-4 text-purple-600"></i>
-                High-CTR Cover Art
-              </span>
-              <span class="px-4 py-2 rounded-xl bg-white/80 border border-slate-200 text-slate-800 font-semibold text-xs sm:text-sm shadow-sm flex items-center gap-1.5">
-                <i data-lucide="wand-2" class="w-4 h-4 text-pink-600"></i>
-                AI Poster Concepts
-              </span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- FEATURED SHOWCASE SECTION -->
-    <section id="showcase" class="py-20 scroll-mt-24">
-      <div class="text-center max-w-3xl mx-auto mb-12" data-aos="fade-up" data-aos-duration="1000">
-        <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-          Featured Works
-        </h2>
-        <p class="mt-4 text-slate-600 text-base sm:text-lg">
-          Filter through motion graphics, YouTube thumbnails, and AI concept artwork.
-        </p>
-
-        <div class="mt-8 flex flex-wrap justify-center gap-2 p-1.5 rounded-2xl bg-slate-200/70 max-w-fit mx-auto">
-          <button onclick="filterShowcase('all')" id="btn-all" class="filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-white text-indigo-600 shadow-sm">
-            All Works
-          </button>
-          <button onclick="filterShowcase('motion')" id="btn-motion" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition-all">
-            Motion Edits
-          </button>
-          <button onclick="filterShowcase('thumbnail')" id="btn-thumbnail" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition-all">
-            Covers & Thumbnails
-          </button>
-          <button onclick="filterShowcase('poster')" id="btn-poster" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition-all">
-            AI Posters
-          </button>
-        </div>
-      </div>
-
-      <div id="showcase-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        <!-- VIDEO ITEMS -->
-        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1h79KAb3ZBNRAJrTjdzMFjdvnQBNavIot/preview')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center">
-            <iframe src="https://drive.google.com/file/d/1h79KAb3ZBNRAJrTjdzMFjdvnQBNavIot/preview" class="w-full h-full border-0 object-contain pointer-events-none"></iframe>
-            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div class="px-4 py-2 rounded-xl bg-white/90 text-slate-900 font-bold text-xs shadow-lg flex items-center gap-2">
-                <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                <span>Click to View Full Screen</span>
-              </div>
-            </div>
-          </div>
-          <div class="p-4 flex flex-col justify-between flex-grow">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
-              <h3 class="font-bold text-slate-900 text-sm mt-1">Short-Form Motion Sequence 01</h3>
-            </div>
-          </div>
-        </div>
-
-        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/17HBVDXnelfrCQfVefIguzRhhDHKZRpQ_/preview')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center">
-            <iframe src="https://drive.google.com/file/d/17HBVDXnelfrCQfVefIguzRhhDHKZRpQ_/preview" class="w-full h-full border-0 object-contain pointer-events-none"></iframe>
-            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div class="px-4 py-2 rounded-xl bg-white/90 text-slate-900 font-bold text-xs shadow-lg flex items-center gap-2">
-                <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                <span>Click to View Full Screen</span>
-              </div>
-            </div>
-          </div>
-          <div class="p-4 flex flex-col justify-between flex-grow">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
-              <h3 class="font-bold text-slate-900 text-sm mt-1">Short-Form Motion Sequence 02</h3>
-            </div>
-          </div>
-        </div>
-
-        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1GPqhLe5C9tN1VE7IoH-k7pWCrGJ_ie11/preview')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center">
-            <iframe src="https://drive.google.com/file/d/1GPqhLe5C9tN1VE7IoH-k7pWCrGJ_ie11/preview" class="w-full h-full border-0 object-contain pointer-events-none"></iframe>
-            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div class="px-4 py-2 rounded-xl bg-white/90 text-slate-900 font-bold text-xs shadow-lg flex items-center gap-2">
-                <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                <span>Click to View Full Screen</span>
-              </div>
-            </div>
-          </div>
-          <div class="p-4 flex flex-col justify-between flex-grow">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
-              <h3 class="font-bold text-slate-900 text-sm mt-1">Short-Form Motion Sequence 03</h3>
-            </div>
-          </div>
-        </div>
-
-        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1o5vVkw-PHaMUuo_W-dCdBx-2-xsNPru3/preview')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center">
-            <iframe src="https://drive.google.com/file/d/1o5vVkw-PHaMUuo_W-dCdBx-2-xsNPru3/preview" class="w-full h-full border-0 object-contain pointer-events-none"></iframe>
-            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div class="px-4 py-2 rounded-xl bg-white/90 text-slate-900 font-bold text-xs shadow-lg flex items-center gap-2">
-                <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                <span>Click to View Full Screen</span>
-              </div>
-            </div>
-          </div>
-          <div class="p-4 flex flex-col justify-between flex-grow">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
-              <h3 class="font-bold text-slate-900 text-sm mt-1">Short-Form Motion Sequence 04</h3>
-            </div>
-          </div>
-        </div>
-
-        <!-- THUMBNAIL / COVER ITEMS -->
-        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1sM57KP0gJF3Q6FsiI6Ex3ujwogTQNWRx')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2">
-            <img src="https://lh3.googleusercontent.com/d/1sM57KP0gJF3Q6FsiI6Ex3ujwogTQNWRx" alt="Thumbnail 1" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 01</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1NXODv7ajXKeCuBlNzyekeC29xHwPDiIk')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2">
-            <img src="https://lh3.googleusercontent.com/d/1NXODv7ajXKeCuBlNzyekeC29xHwPDiIk" alt="Thumbnail 2" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 02</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1C3Mye_IzQZzwRgfVJsVGeO2jBaYsat0n')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2">
-            <img src="https://lh3.googleusercontent.com/d/1C3Mye_IzQZzwRgfVJsVGeO2jBaYsat0n" alt="Thumbnail 3" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 03</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/14_AtLV_EJkbRyl53Z8JEjlt1xLna0lhT')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2">
-            <img src="https://lh3.googleusercontent.com/d/14_AtLV_EJkbRyl53Z8JEjlt1xLna0lhT" alt="Thumbnail 4" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 04</h3>
-          </div>
-        </div>
-
-        <!-- POSTER ITEMS -->
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1iZ-Wdj8dA_d0GelfK_N3OpSeUgaltV07')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/1iZ-Wdj8dA_d0GelfK_N3OpSeUgaltV07" alt="AI Poster 1" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 01</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/14TaYyn-gYlzO9syUc1h9qLrDlKmxEzQ-')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/14TaYyn-gYlzO9syUc1h9qLrDlKmxEzQ-" alt="AI Poster 2" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 02</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1b32nGghJ6j774CbOpskvzVX_0tV26itm')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/1b32nGghJ6j774CbOpskvzVX_0tV26itm" alt="AI Poster 3" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 03</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1J2jjWZF6kvMs1Fi6JvmWgnDcPFsQh2IJ')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/1J2jjWZF6kvMs1Fi6JvmWgnDcPFsQh2IJ" alt="AI Poster 4" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 04</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1sRn56IjyAul2G6zZAC__3hVyAgQjZEY1')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/1sRn56IjyAul2G6zZAC__3hVyAgQjZEY1" alt="AI Poster 5" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 05</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/18Pv0NzbdTGLVlGUFnOjrXHm6y_GZ2Qxx')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/18Pv0NzbdTGLVlGUFnOjrXHm6y_GZ2Qxx" alt="AI Poster 6" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 06</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1S8y61INsA0As3_KX8vci8zC5N-pXH18L')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/1S8y61INsA0As3_KX8vci8zC5N-pXH18L" alt="AI Poster 7" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 07</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1C3lMcrIoTDoFnju6VxrA4Ozn0Dv1Rpdz')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/1C3lMcrIoTDoFnju6VxrA4Ozn0Dv1Rpdz" alt="AI Poster 8" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 08</h3>
-          </div>
-        </div>
-
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1AoIR3hLUDc-Fgh9ttMHCCMbF0oGxanpU')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
-            <img src="https://lh3.googleusercontent.com/d/1AoIR3hLUDc-Fgh9ttMHCCMbF0oGxanpU" alt="AI Poster 9" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
-            </div>
-          </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 09</h3>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CAPABILITIES SECTION -->
-    <section id="capabilities" class="py-20 scroll-mt-24">
-      <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up" data-aos-duration="1000">
-        <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-          Capabilities & Toolkit
-        </h2>
-        <p class="mt-4 text-slate-600 text-base sm:text-lg">
-          Powered by state-of-the-art AI creative engines, professional video pacing, and clean design standards.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="glass-card rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/80 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-6">
-              <i data-lucide="bot" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">AI Creative Engines</h3>
-            <p class="text-slate-600 text-sm mb-6">Leveraging cutting-edge large language models for advanced workflow optimization, precise ideation, and automated content structuring.</p>
-            <ul class="space-y-2.5 text-sm font-medium text-slate-700">
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-indigo-600"></i> Google AI Studio & Gemini</li>
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-indigo-600"></i> ChatGPT & Claude</li>
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-indigo-600"></i> Perplexity & Grok</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="glass-card rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/80 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-6">
-              <i data-lucide="film" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">Motion Editing & Production</h3>
-            <p class="text-slate-600 text-sm mb-6">Crafting clean, premium, and engaging video edits tailored for finance, storytelling, and high-retention audience formats using CapCut Desktop.</p>
-            <ul class="space-y-2.5 text-sm font-medium text-slate-700">
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-600"></i> CapCut Desktop Suite</li>
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-600"></i> Pacing & Dynamic Rhythm</li>
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-600"></i> Immersive Audio Integration</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="glass-card rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/80 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center mb-6">
-              <i data-lucide="palette" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">Graphic & CTR Design</h3>
-            <p class="text-slate-600 text-sm mb-6">Designing high-converting thumbnail layouts, promotional graphics, and clean brand posters using Canva.</p>
-            <ul class="space-y-2.5 text-sm font-medium text-slate-700">
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-pink-600"></i> Canva Visual Composition</li>
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-pink-600"></i> High-CTR Thumbnail Framing</li>
-              <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-pink-600"></i> Branding & Poster Design</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DIRECT CONNECT FORM -->
-    <section id="connect" class="py-20 scroll-mt-24">
-      <div class="glass-card rounded-3xl p-8 sm:p-12 lg:p-16 shadow-xl max-w-3xl mx-auto border border-white/80" data-aos="fade-up" data-aos-duration="1000">
-        <div class="text-center mb-10">
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-600 text-white mb-4 shadow-md shadow-indigo-600/30">
-            <i data-lucide="message-circle" class="w-6 h-6"></i>
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
-            Direct Connect
-          </h2>
-          <p class="mt-2 text-slate-600 text-sm sm:text-base">
-            Submit your project details below to trigger an instant WhatsApp message connection.
-          </p>
-        </div>
-
-        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-5">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="user_name" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Your Name</label>
-              <input type="text" id="user_name" required value="Sahil Kumar" class="w-full px-4 py-3 rounded-xl bg-white/80 border border-slate-200 text-slate-800 text-sm transition-all" onclick="if(this.value=='Sahil Kumar'){this.value='';}" onblur="if(this.value==''){this.value='Sahil Kumar';}">
-            </div>
-            <div>
-              <label for="user_email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Email Address</label>
-              <input type="email" id="user_email" required value="devraut709@gmail.com" class="w-full px-4 py-3 rounded-xl bg-white/80 border border-slate-200 text-slate-800 text-sm transition-all" onclick="if(this.value=='devraut709@gmail.com'){this.value='';}" onblur="if(this.value==''){this.value='devraut709@gmail.com';}">
-            </div>
-          </div>
-
-          <div>
-            <label for="user_phone" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Phone / WhatsApp Number</label>
-            <div class="flex gap-2 relative">
-              <div class="relative inline-block text-left">
-                <button type="button" id="country-dropdown-btn" onclick="toggleCountryDropdown()" class="h-full px-3.5 py-3 rounded-xl bg-white/90 border border-slate-200 text-slate-800 text-sm font-medium flex items-center gap-2">
-                  <span id="selected-flag">🇮🇳</span>
-                  <span id="selected-code">+91</span>
-                  <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500"></i>
-                </button>
-
-                <div id="country-dropdown-menu" class="absolute left-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200 z-[99] hidden flex-col overflow-hidden">
-                  <div class="p-2.5 border-b border-slate-100 bg-slate-50">
-                    <input type="text" id="country-search-input" oninput="filterCountries(this.value)" placeholder="Search country..." class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-800">
-                  </div>
-                  <div id="country-list" class="max-h-60 overflow-y-auto custom-scrollbar p-1"></div>
-                </div>
-              </div>
-
-              <input type="tel" id="user_phone" required maxlength="10" value="9971454170" oninput="validatePhoneInput(this)" onclick="if(this.value=='9971454170'){this.value='';}" onblur="if(this.value==''){this.value='9971454170';}" class="w-full px-4 py-3 rounded-xl bg-white/80 border border-slate-200 text-slate-800 text-sm transition-all">
-            </div>
-            <p class="text-[11px] text-slate-500 mt-1">Please enter exactly 10 digits without country code.</p>
-          </div>
-
-          <div>
-            <label for="user_message" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Project Brief / Message</label>
-            <textarea id="user_message" rows="4" required class="w-full px-4 py-3 rounded-xl bg-white/80 border border-slate-200 text-slate-800 text-sm transition-all resize-none" onblur="if(this.value.trim()==''){this.value='Hi Sahil, I checked out your portfolio and would love to discuss a potential project.';}">Hi Sahil, I checked out your portfolio and would love to discuss a potential project.</textarea>
-          </div>
-
-          <div>
-            <button type="submit" class="w-full py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 group">
-              <span>Send message</span>
-              <i data-lucide="send" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="py-8 text-center text-slate-500 text-xs border-t border-slate-200/60 relative z-10">
-    <p>© <span id="year"></span> Sahil Kumar. All rights reserved.</p>
-  </footer>
-
-  <!-- LIGHTBOX PREVIEW MODAL -->
-  <div id="lightbox" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox(event)">
-    <div class="relative max-w-5xl max-h-[90vh] w-full flex flex-col items-center justify-center" onclick="event.stopPropagation()">
-      <button onclick="closeLightbox()" class="absolute -top-12 right-0 p-2 text-white/80 hover:text-white" title="Close Preview">
-        <i data-lucide="x" class="w-8 h-8"></i>
-      </button>
-      <img id="lightbox-img" src="" alt="Enlarged Preview" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl">
-    </div>
-  </div>
-
-  <!-- VIDEO LIGHTBOX MODAL -->
-  <div id="video-lightbox" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg hidden items-center justify-center p-4 sm:p-8" onclick="closeVideoLightbox(event)">
-    <div class="relative max-w-5xl w-full aspect-video flex flex-col items-center justify-center bg-black rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
-      <button onclick="closeVideoLightbox()" class="absolute -top-12 right-0 p-2 text-white/80 hover:text-white z-10" title="Close Full Screen">
-        <i data-lucide="x" class="w-8 h-8"></i>
-      </button>
-      <iframe id="lightbox-video-frame" src="" class="w-full h-full border-0" allow="autoplay; fullscreen"></iframe>
-    </div>
-  </div>
-
-  <!-- PORTFOLIO INTERACTION SCRIPTS -->
-  <script>
-    AOS.init({ once: true, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', offset: 50 });
-    lucide.createIcons();
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const heroTitle = document.getElementById('hero-title');
-      setTimeout(() => {
-        heroTitle.style.opacity = '0';
-        heroTitle.style.transform = 'translateY(-15px)';
-        setTimeout(() => {
-          heroTitle.textContent = 'SAHIL KUMAR';
-          heroTitle.style.transform = 'translateY(15px)';
-          setTimeout(() => {
-            heroTitle.style.opacity = '1';
-            heroTitle.style.transform = 'translateY(0px)';
-          }, 50);
-        }, 350);
-      }, 1000);
-
-      loadCountriesIntoDropdown();
-    });
-
-    const countries = [
-      { name: "India", code: "+91", flag: "🇮🇳" },
-      { name: "United States", code: "+1", flag: "🇺🇸" },
-      { name: "United Kingdom", code: "+44", flag: "🇬🇧" },
-      { name: "United Arab Emirates", code: "+971", flag: "🇦🇪" },
-      { name: "France", code: "+33", flag: "🇫🇷" },
-      { name: "Germany", code: "+49", flag: "🇩🇪" },
-      { name: "Canada", code: "+1", flag: "🇨🇦" }
-    ];
-
-    function loadCountriesIntoDropdown(filter = "") {
-      const listContainer = document.getElementById('country-list');
-      if(!listContainer) return;
-      listContainer.innerHTML = '';
-      const filtered = countries.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()) || c.code.includes(filter));
-      filtered.forEach(c => {
-        const item = document.createElement('div');
-        item.className = 'flex items-center justify-between px-3 py-2 rounded-xl hover:bg-indigo-50 cursor-pointer text-xs font-medium text-slate-700';
-        item.innerHTML = `<span>${c.flag} ${c.name}</span> <span class="text-slate-400 font-mono">${c.code}</span>`;
-        item.onclick = () => selectCountry(c.flag, c.code);
-        listContainer.appendChild(item);
-      });
-    }
-
-    function toggleCountryDropdown() {
-      const menu = document.getElementById('country-dropdown-menu');
-      menu.classList.toggle('hidden');
-      menu.classList.toggle('flex');
-    }
-
-    function selectCountry(flag, code) {
-      document.getElementById('selected-flag').textContent = flag;
-      document.getElementById('selected-code').textContent = code;
-      const menu = document.getElementById('country-dropdown-menu');
-      menu.classList.add('hidden');
-      menu.classList.remove('flex');
-    }
-
-    function filterShowcase(category) {
-      const cards = document.querySelectorAll('.showcase-card');
-      const buttons = document.querySelectorAll('.filter-btn');
-
-      buttons.forEach(btn => {
-        btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
-        btn.classList.add('text-slate-600');
-      });
-
-      const activeBtn = document.getElementById(`btn-${category}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
-        activeBtn.classList.remove('text-slate-600');
-      }
-
-      cards.forEach(card => {
-        if (category === 'all' || card.classList.contains(`item-${category}`)) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-    }
-
-    function openLightbox(imageSrc) {
-      document.getElementById('lightbox-img').src = imageSrc;
-      document.getElementById('lightbox').classList.remove('hidden');
-      document.getElementById('lightbox').classList.add('flex');
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.add('hidden');
-      document.getElementById('lightbox').classList.remove('flex');
-    }
-
-    function openVideoLightbox(videoUrl) {
-      document.getElementById('lightbox-video-frame').src = videoUrl;
-      document.getElementById('video-lightbox').classList.remove('hidden');
-      document.getElementById('video-lightbox').classList.add('flex');
-    }
-
-    function closeVideoLightbox() {
-      document.getElementById('lightbox-video-frame').src = '';
-      document.getElementById('video-lightbox').classList.add('hidden');
-      document.getElementById('video-lightbox').classList.remove('flex');
-    }
-
-    function validatePhoneInput(input) {
-      input.value = input.value.replace(/\D/g, '').slice(0, 10);
-    }
-
-    function handleContactSubmit(event) {
-      event.preventDefault();
-      const name = document.getElementById('user_name').value.trim();
-      const email = document.getElementById('user_email').value.trim();
-      const countryCode = document.getElementById('selected-code').textContent.replace('+', '');
-      const phoneDigits = document.getElementById('user_phone').value.trim();
-      const message = document.getElementById('user_message').value.trim();
-
-      if (phoneDigits.length !== 10) {
-        alert('Please enter a valid 10-digit phone number.');
-        return;
-      }
-
-      const formattedText = `Hi Sahil,%0A%0A*New Project Inquiry*%0A*Name:* ${encodeURIComponent(name)}%0A*Email:* ${encodeURIComponent(email)}%0A*Client Phone:* +${countryCode} ${encodeURIComponent(phoneDigits)}%0A*Message:* ${encodeURIComponent(message)}`;
-      window.open(`https://api.whatsapp.com/send?phone=919971454170&text=${formattedText}`, '_blank');
-    }
-  </script>
-
-  <!-- SAHIL AI VOICE AGENT CORE SCRIPT -->
+<!-- SAHIL AI VOICE AGENT CORE SCRIPT -->
   <script>
     let isAgentActive = false;
     let isAgentListening = false;
@@ -813,20 +29,39 @@
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       sahilRecognition = new SpeechRecognition();
-      sahilRecognition.continuous = true;
+      sahilRecognition.continuous = false; // Changed to false to prevent mic locking loops
       sahilRecognition.interimResults = false;
 
       sahilRecognition.onresult = async (event) => {
         if (isAgentProcessing) return;
-        const lastIndex = event.results.length - 1;
-        const transcript = event.results[lastIndex][0].transcript.trim();
+        const transcript = event.results[0][0].transcript.trim();
         if (!transcript) return;
 
         stopSahilListeningState();
         await sendQueryToSahilBackend(transcript);
       };
 
-      sahilRecognition.onerror = () => { stopSahilListeningState(); };
+      sahilRecognition.onerror = (event) => {
+        // Auto recover on no-speech or network glitches
+        if (event.error === 'no-speech' || event.error === 'aborted') {
+          if (isAgentActive && !isAgentProcessing) {
+            try { sahilRecognition.start(); } catch(e){}
+          } else {
+            stopSahilListeningState();
+          }
+        } else {
+          stopSahilListeningState();
+        }
+      };
+
+      sahilRecognition.onend = () => {
+        // If agent is active and not currently speaking/processing, keep mic open seamlessly
+        if (isAgentActive && !isAgentProcessing && !isAgentListening) {
+          try {
+            sahilRecognition.start();
+          } catch(e) {}
+        }
+      };
     }
 
     function toggleSahilAgent() {
@@ -841,13 +76,14 @@
           if (coreIndicator) coreIndicator.style.opacity = '1';
         }, 300);
 
-        const greeting = "Hey there! I'm Sahil Kumar. Welcome to my portfolio—what high-converting design or video project are we working on today?";
+        const greeting = "Hello! I am Sahil Kumar. Welcome to my portfolio—what design or video project shall we work on today?";
         sahilHistory.push({ role: 'model', text: greeting });
         speakSahilReply(greeting);
       } else {
         isAgentActive = false;
         stopSahilListeningState();
         window.speechSynthesis.cancel();
+        try { sahilRecognition.stop(); } catch(e){}
 
         if (coreIndicator) coreIndicator.style.opacity = '0';
         setTimeout(() => {
@@ -906,14 +142,19 @@
       isAgentListening = true;
       isAgentProcessing = false;
       const statusText = document.getElementById('voiceStatusText');
-      if (statusText) statusText.innerText = 'You talk...';
+      if (statusText) statusText.innerText = 'Listening... Speak now';
       startVoiceMorphAnimation();
-      try { sahilRecognition.start(); } catch(e){}
+      try {
+        sahilRecognition.start();
+      } catch(e) {}
     }
 
     function stopSahilListeningState() {
       isAgentListening = false;
       stopVoiceMorphAnimation();
+      try {
+        sahilRecognition.stop();
+      } catch(e) {}
     }
 
     async function sendQueryToSahilBackend(userText) {
@@ -938,34 +179,22 @@
           sahilHistory.push({ role: 'user', text: userText });
           sahilHistory.push({ role: 'model', text: data.reply });
           
-          // Ultra-Robust Intent & Navigation Parser with Dynamic Question Prompting
+          // Navigation triggers
           const lowerUserQuery = userText.toLowerCase();
           const lowerReply = data.reply.toLowerCase();
 
-          const isCapIntent = lowerUserQuery.includes('capabilities') || lowerUserQuery.includes('capability') || lowerUserQuery.includes('toolkit') || lowerUserQuery.includes('skills') || lowerUserQuery.includes('page') && (lowerUserQuery.includes('cap') || lowerUserQuery.includes('केपेबिलिटीज'));
-          const isIdIntent = lowerUserQuery.includes('identity') || lowerUserQuery.includes('about') || lowerUserQuery.includes('profile') || lowerUserQuery.includes('intro') || lowerUserQuery.includes('परिचय');
-          const isShowcaseIntent = lowerUserQuery.includes('showcase') || lowerUserQuery.includes('poster') || lowerUserQuery.includes('thumbnail') || lowerUserQuery.includes('video') || lowerUserQuery.includes('works') || lowerUserQuery.includes('डिजाइन') || lowerUserQuery.includes('पोस्टर');
-          const isHomeIntent = lowerUserQuery.includes('home') || lowerUserQuery.includes('main') || lowerUserQuery.includes('top') || lowerUserQuery.includes('होमपेज') || lowerUserQuery.includes('शुरुआत');
-
-          if (isCapIntent || lowerReply.includes('capabilities')) {
-            if (confirm("Would you like me to take you directly to the Capabilities section?")) {
-              document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
-            }
-          } else if (isIdIntent || lowerReply.includes('identity') || lowerReply.includes('about')) {
-            if (confirm("Would you like me to scroll up to the Identity section?")) {
-              document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-            }
-          } else if (isShowcaseIntent || lowerReply.includes('showcase')) {
-            if (confirm("Would you like me to take you to the Showcase section?")) {
-              document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
-            }
-          } else if (isHomeIntent) {
-            if (confirm("Would you like me to take you to the top of the homepage?")) {
-              document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
-            }
+          if (lowerUserQuery.includes('capabilities') || lowerReply.includes('capabilities')) {
+            document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
+          } else if (lowerUserQuery.includes('identity') || lowerReply.includes('identity') || lowerUserQuery.includes('about')) {
+            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+          } else if (lowerUserQuery.includes('showcase') || lowerReply.includes('showcase') || lowerUserQuery.includes('poster')) {
+            document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
           }
 
           speakSahilReply(data.reply);
+        } else {
+          isAgentProcessing = false;
+          if (isAgentActive) startSahilListeningState();
         }
       } catch (err) {
         isAgentProcessing = false;
@@ -987,10 +216,10 @@
       let selectedVoice = null;
       if (isHindi) {
         utterance.lang = 'hi-IN';
-        selectedVoice = sahilVoices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN' || v.name.includes('Hindi') || v.name.includes('Google हिन्दी'));
+        selectedVoice = sahilVoices.find(v => v.lang === 'hi-IN' || v.name.includes('Hindi') || v.name.includes('Google हिन्दी'));
       } else {
         utterance.lang = 'en-IN';
-        selectedVoice = sahilVoices.find(v => v.lang === 'en-IN' || v.lang === 'en_IN' || v.name.includes('India'));
+        selectedVoice = sahilVoices.find(v => v.lang === 'en-IN' || v.name.includes('India') || v.name.includes('English'));
       }
 
       if (selectedVoice) utterance.voice = selectedVoice;
@@ -999,19 +228,29 @@
 
       startVoiceMorphAnimation();
 
-      const onAudioEnd = () => {
+      let hasFinishedSpeaking = false;
+      const finishSpeakingOnce = () => {
+        if (hasFinishedSpeaking) return;
+        hasFinishedSpeaking = true;
         isAgentProcessing = false;
         stopVoiceMorphAnimation();
         if (isAgentActive) {
-          startSahilListeningState();
+          setTimeout(() => {
+            startSahilListeningState();
+          }, 400);
         }
       };
 
-      utterance.onend = onAudioEnd;
-      utterance.onerror = onAudioEnd;
+      utterance.onend = finishSpeakingOnce;
+      utterance.onerror = finishSpeakingOnce;
 
       window.speechSynthesis.speak(utterance);
+      
+      // Fallback timer in case speech synthesis end event fails on some mobile/desktop browsers
+      setTimeout(() => {
+        if (!window.speechSynthesis.speaking && isAgentProcessing) {
+          finishSpeakingOnce();
+        }
+      }, Math.max(3000, text.length * 80));
     }
   </script>
-</body>
-</html>
