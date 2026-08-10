@@ -147,6 +147,7 @@
         </a>
       </div>
     </section>
+
     <!-- IDENTITY SECTION WITH ROBUST AGENT -->
     <section id="about" class="py-20 scroll-mt-24">
       <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl shadow-slate-900/5 relative overflow-hidden" data-aos="fade-up" data-aos-duration="1000">
@@ -622,294 +623,299 @@
         </form>
       </div>
     </section>
-    </main>
+
+  </main>
 
   <!-- FOOTER -->
-  <footer class="relative z-10 border-t border-slate-200/80 bg-white/40 backdrop-blur-md py-8 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p>© 2026 Sahil Kumar. All rights reserved.</p>
-      <div class="flex items-center gap-4">
-        <a href="#hero" class="hover:text-indigo-600 transition-colors">Back to top</a>
-      </div>
-    </div>
+  <footer class="py-8 text-center text-slate-500 text-xs border-t border-slate-200/60 relative z-10">
+    <p>© <span id="year"></span> Sahil Kumar. All rights reserved.</p>
   </footer>
 
-  <!-- IMAGE LIGHTBOX MODAL -->
-  <div id="lightbox" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox()">
-    <div class="relative max-w-5xl max-h-[90vh] w-full flex items-center justify-center" onclick="event.stopPropagation()">
-      <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-white hover:text-indigo-400 p-2 transition-colors">
+  <!-- LIGHTBOX PREVIEW MODAL -->
+  <div id="lightbox" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox(event)">
+    <div class="relative max-w-5xl max-h-[90vh] w-full flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+      <button onclick="closeLightbox()" class="absolute -top-12 right-0 p-2 text-white/80 hover:text-white" title="Close Preview">
         <i data-lucide="x" class="w-8 h-8"></i>
       </button>
-      <img id="lightbox-img" src="" alt="Enlarged Showcase" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl">
+      <img id="lightbox-img" src="" alt="Enlarged Preview" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl">
     </div>
   </div>
 
   <!-- VIDEO LIGHTBOX MODAL -->
-  <div id="video-lightbox" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeVideoLightbox()">
-    <div class="relative max-w-5xl max-h-[90vh] w-full aspect-video flex items-center justify-center bg-black rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
-      <button onclick="closeVideoLightbox()" class="absolute top-4 right-4 z-10 text-white hover:text-indigo-400 p-2 bg-black/50 rounded-full transition-colors">
-        <i data-lucide="x" class="w-6 h-6"></i>
+  <div id="video-lightbox" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg hidden items-center justify-center p-4 sm:p-8" onclick="closeVideoLightbox(event)">
+    <div class="relative max-w-5xl w-full aspect-video flex flex-col items-center justify-center bg-black rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <button onclick="closeVideoLightbox()" class="absolute -top-12 right-0 p-2 text-white/80 hover:text-white z-10" title="Close Full Screen">
+        <i data-lucide="x" class="w-8 h-8"></i>
       </button>
-      <iframe id="video-lightbox-frame" src="" class="w-full h-full border-0"></iframe>
+      <iframe id="lightbox-video-frame" src="" class="w-full h-full border-0" allow="autoplay; fullscreen"></iframe>
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- PORTFOLIO INTERACTION SCRIPTS -->
   <script>
-    // Initialize AOS Animation Library
-    AOS.init({ once: true, offset: 50 });
+    AOS.init({ once: true, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', offset: 50 });
     lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Dynamic Hero Title Swapper
-    const heroTitles = ["PORTFOLIO BY SAHIL", "HIGH-CTR CREATOR", "MOTION EDITOR", "AI POSTER DESIGNER"];
-    let currentTitleIndex = 0;
-    setInterval(() => {
-      const titleEl = document.getElementById('hero-title');
-      if(titleEl) {
-        titleEl.classList.add('opacity-0', 'translate-y-4');
+    window.addEventListener('DOMContentLoaded', () => {
+      const heroTitle = document.getElementById('hero-title');
+      setTimeout(() => {
+        heroTitle.style.opacity = '0';
+        heroTitle.style.transform = 'translateY(-15px)';
         setTimeout(() => {
-          currentTitleIndex = (currentTitleIndex + 1) % heroTitles.length;
-          titleEl.innerText = heroTitles[currentTitleIndex];
-          titleEl.classList.remove('opacity-0', 'translate-y-4');
+          heroTitle.textContent = 'SAHIL KUMAR';
+          heroTitle.style.transform = 'translateY(15px)';
+          setTimeout(() => {
+            heroTitle.style.opacity = '1';
+            heroTitle.style.transform = 'translateY(0px)';
+          }, 50);
         }, 350);
-      }
-    }, 3500);
+      }, 1000);
 
-    // Showcase Filtering Logic
-    function filterShowcase(category) {
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
-        btn.classList.add('text-slate-600');
-      });
-      const activeBtn = document.getElementById(`btn-${category}`);
-      if(activeBtn) {
-        activeBtn.classList.remove('text-slate-600');
-        activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
-      }
+      loadCountriesIntoDropdown();
+    });
 
-      const cards = document.querySelectorAll('.showcase-card');
-      cards.forEach(card => {
-        if (category === 'all' || card.classList.contains(`item-${category}`)) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
-
-    // Lightbox Controls
-    function openLightbox(src) {
-      document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox').classList.remove('hidden');
-      document.getElementById('lightbox').classList.add('flex');
-    }
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('flex');
-      document.getElementById('lightbox').classList.add('hidden');
-      document.getElementById('lightbox-img').src = '';
-    }
-
-    function openVideoLightbox(src) {
-      document.getElementById('video-lightbox-frame').src = src;
-      document.getElementById('video-lightbox').classList.remove('hidden');
-      document.getElementById('video-lightbox').classList.add('flex');
-    }
-    function closeVideoLightbox() {
-      document.getElementById('video-lightbox').classList.remove('flex');
-      document.getElementById('video-lightbox').classList.add('hidden');
-      document.getElementById('video-lightbox-frame').src = '';
-    }
-
-    // Country Dropdown Data & Logic
     const countries = [
       { name: "India", code: "+91", flag: "🇮🇳" },
       { name: "United States", code: "+1", flag: "🇺🇸" },
       { name: "United Kingdom", code: "+44", flag: "🇬🇧" },
       { name: "United Arab Emirates", code: "+971", flag: "🇦🇪" },
-      { name: "Canada", code: "+1", flag: "🇨🇦" },
-      { name: "Australia", code: "+61", flag: "🇦🇺" },
-      { name: "Germany", code: "+49", flag: "🇩🇪" },
       { name: "France", code: "+33", flag: "🇫🇷" },
-      { name: "Singapore", code: "+65", flag: "🇸🇬" }
+      { name: "Germany", code: "+49", flag: "🇩🇪" },
+      { name: "Canada", code: "+1", flag: "🇨🇦" }
     ];
 
-    function renderCountries(list) {
-      const container = document.getElementById('country-list');
-      if(!container) return;
-      container.innerHTML = list.map(c => `
-        <div onclick="selectCountry('${c.flag}', '${c.code}')" class="flex items-center gap-3 px-3 py-2 hover:bg-slate-100 rounded-xl cursor-pointer text-xs font-medium text-slate-800">
-          <span>${c.flag}</span>
-          <span class="flex-grow">${c.name}</span>
-          <span class="text-slate-500">${c.code}</span>
-        </div>
-      `).join('');
+    function loadCountriesIntoDropdown(filter = "") {
+      const listContainer = document.getElementById('country-list');
+      if(!listContainer) return;
+      listContainer.innerHTML = '';
+      const filtered = countries.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()) || c.code.includes(filter));
+      filtered.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between px-3 py-2 rounded-xl hover:bg-indigo-50 cursor-pointer text-xs font-medium text-slate-700';
+        item.innerHTML = `<span>${c.flag} ${c.name}</span> <span class="text-slate-400 font-mono">${c.code}</span>`;
+        item.onclick = () => selectCountry(c.flag, c.code);
+        listContainer.appendChild(item);
+      });
     }
 
     function toggleCountryDropdown() {
       const menu = document.getElementById('country-dropdown-menu');
-      if(menu) {
-        menu.classList.toggle('hidden');
-        menu.classList.toggle('flex');
-        renderCountries(countries);
-      }
+      menu.classList.toggle('hidden');
+      menu.classList.toggle('flex');
     }
 
     function selectCountry(flag, code) {
-      document.getElementById('selected-flag').innerText = flag;
-      document.getElementById('selected-code').innerText = code;
-      document.getElementById('country-dropdown-menu').classList.add('hidden');
-      document.getElementById('country-dropdown-menu').classList.remove('flex');
+      document.getElementById('selected-flag').textContent = flag;
+      document.getElementById('selected-code').textContent = code;
+      const menu = document.getElementById('country-dropdown-menu');
+      menu.classList.add('hidden');
+      menu.classList.remove('flex');
     }
 
-    function filterCountries(query) {
-      const filtered = countries.filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.code.includes(query));
-      renderCountries(filtered);
+    function filterShowcase(category) {
+      const cards = document.querySelectorAll('.showcase-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+      });
+
+      const activeBtn = document.getElementById(`btn-${category}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+        activeBtn.classList.remove('text-slate-600');
+      }
+
+      cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(`item-${category}`)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function openLightbox(imageSrc) {
+      document.getElementById('lightbox-img').src = imageSrc;
+      document.getElementById('lightbox').classList.remove('hidden');
+      document.getElementById('lightbox').classList.add('flex');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.add('hidden');
+      document.getElementById('lightbox').classList.remove('flex');
+    }
+
+    function openVideoLightbox(videoUrl) {
+      document.getElementById('lightbox-video-frame').src = videoUrl;
+      document.getElementById('video-lightbox').classList.remove('hidden');
+      document.getElementById('video-lightbox').classList.add('flex');
+    }
+
+    function closeVideoLightbox() {
+      document.getElementById('lightbox-video-frame').src = '';
+      document.getElementById('video-lightbox').classList.add('hidden');
+      document.getElementById('video-lightbox').classList.remove('flex');
     }
 
     function validatePhoneInput(input) {
       input.value = input.value.replace(/\D/g, '').slice(0, 10);
     }
 
-    // Direct WhatsApp Submitter
-    function handleContactSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('user_name').value;
-      const email = document.getElementById('user_email').value;
-      const code = document.getElementById('selected-code').innerText;
-      const phone = document.getElementById('user_phone').value;
-      const msg = document.getElementById('user_message').value;
+    function handleContactSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('user_name').value.trim();
+      const email = document.getElementById('user_email').value.trim();
+      const countryCode = document.getElementById('selected-code').textContent.replace('+', '');
+      const phoneDigits = document.getElementById('user_phone').value.trim();
+      const message = document.getElementById('user_message').value.trim();
 
-      const whatsappText = `Hello Sahil, I am reaching out from your portfolio site.\n\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${code} ${phone}\n*Message:* ${msg}`;
-      const encoded = encodeURIComponent(whatsappText);
-      window.open(`https://wa.me/919971454170?text=${encoded}`, '_blank');
-    }
-
-
-    // ==========================================
-    // VOICE AI AGENT CORE & AUTOMATIC WHATSAPP ENGINE
-    // ==========================================
-    let isAgentActive = false;
-    let isAgentProcessing = false;
-    let sahilRecognition = null;
-    let sahilHistory = [];
-
-    function extractPortfolioContext() {
-      return {
-        name: "Sahil Kumar",
-        role: "Visual Content Designer & Video Editor",
-        skills: ["Motion Video Editing", "High-CTR Cover Art & Thumbnails", "AI Concept Posters", "Canva", "CapCut Desktop", "Google AI Studio"],
-        location: "Faridabad & New Delhi, India"
-      };
-    }
-
-    function toggleSahilAgent() {
-      if (!isAgentActive) {
-        startSahilAgentSession();
-      } else {
-        stopSahilAgentSession();
-      }
-    }
-
-    function startSahilAgentSession() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Speech recognition is not supported in this browser. Try Google Chrome.");
+      if (phoneDigits.length !== 10) {
+        alert('Please enter a valid 10-digit phone number.');
         return;
       }
 
-      isAgentActive = true;
-      const outerBox = document.getElementById('jarvis-outer');
-      const coreIndicator = document.getElementById('jarvis-core-indicator');
-      const statusText = document.getElementById('voiceStatusText');
+      const formattedText = `Hi Sahil,%0A%0A*New Project Inquiry*%0A*Name:* ${encodeURIComponent(name)}%0A*Email:* ${encodeURIComponent(email)}%0A*Client Phone:* +${countryCode} ${encodeURIComponent(phoneDigits)}%0A*Message:* ${encodeURIComponent(message)}`;
+      window.open(`https://api.whatsapp.com/send?phone=919971454170&text=${formattedText}`, '_blank');
+    }
+  </script>
 
-      if(outerBox) {
-        outerBox.classList.add('border-indigo-500', 'scale-105', 'shadow-indigo-500/50');
-        outerBox.style.background = 'radial-gradient(circle, #1e1b4b 0%, #020617 100%)';
-      }
-      if(coreIndicator) coreIndicator.style.opacity = '1';
-      if(statusText) statusText.innerText = 'Listening... Speak now';
+  <!-- SAHIL AI VOICE AGENT CORE SCRIPT -->
+  <script>
+    let isAgentActive = false;
+    let isAgentListening = false;
+    let isAgentProcessing = false;
+    let sahilRecognition;
+    let sahilHistory = [];
+    let sahilVoices = [];
+    let morphInterval = null;
 
+    function loadSahilVoices() {
+      sahilVoices = window.speechSynthesis.getVoices();
+    }
+    if ('speechSynthesis' in window) {
+      loadSahilVoices();
+      window.speechSynthesis.onvoiceschanged = loadSahilVoices;
+    }
+
+    function extractPortfolioContext() {
+      return {
+        title: document.title,
+        headings: Array.from(document.querySelectorAll('h1, h2, h3')).map(h => h.innerText.trim()),
+        paragraphs: Array.from(document.querySelectorAll('p')).map(p => p.innerText.trim()).slice(0, 12),
+        skills: ["AI Poster Design", "High-CTR Thumbnails", "CapCut Motion Video Editing", "Short-form Reels"],
+        tools: ["Canva", "CapCut", "Google AI Studio", "LLM Workflows"]
+      };
+    }
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       sahilRecognition = new SpeechRecognition();
-      sahilRecognition.continuous = false;
+      sahilRecognition.continuous = true;
       sahilRecognition.interimResults = false;
-      sahilRecognition.lang = 'en-IN'; // Supports both English and Hinglish context
 
-      sahilRecognition.onresult = async function(event) {
-        const userText = event.results[0][0].transcript;
-        if(statusText) statusText.innerText = `You: "${userText}"`;
-        await sendQueryToSahilBackend(userText);
+      sahilRecognition.onresult = async (event) => {
+        if (isAgentProcessing) return;
+        const lastIndex = event.results.length - 1;
+        const transcript = event.results[lastIndex][0].transcript.trim();
+        if (!transcript) return;
+
+        stopSahilListeningState();
+        await sendQueryToSahilBackend(transcript);
       };
 
-      sahilRecognition.onerror = function(event) {
-        if (!isAgentProcessing && isAgentActive) {
-          startSahilListeningState();
-        }
-      };
+      sahilRecognition.onerror = () => { stopSahilListeningState(); };
+    }
 
-      sahilRecognition.onend = function() {
-        if (!isAgentProcessing && isAgentActive) {
-          startSahilListeningState();
-        }
-      };
+    function toggleSahilAgent() {
+      const boxContent = document.getElementById('box-content');
+      const coreIndicator = document.getElementById('jarvis-core-indicator');
 
-      try {
-        sahilRecognition.start();
-      } catch(e) {}
+      if (!isAgentActive) {
+        isAgentActive = true;
+        if (boxContent) boxContent.style.opacity = '0';
+        setTimeout(() => {
+          if (boxContent) boxContent.style.display = 'none';
+          if (coreIndicator) coreIndicator.style.opacity = '1';
+        }, 300);
+
+        const greeting = "Hey there! I'm Sahil Kumar. Welcome to my portfolio—what high-converting design or video project are we working on today?";
+        sahilHistory.push({ role: 'model', text: greeting });
+        speakSahilReply(greeting);
+      } else {
+        isAgentActive = false;
+        stopSahilListeningState();
+        window.speechSynthesis.cancel();
+
+        if (coreIndicator) coreIndicator.style.opacity = '0';
+        setTimeout(() => {
+          if (boxContent) {
+            boxContent.style.display = 'flex';
+            boxContent.innerHTML = `
+              <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-white shadow-lg">
+                <i data-lucide="mic" class="w-6 h-6 text-indigo-300"></i>
+              </div>
+              <h3 class="text-white font-extrabold text-sm sm:text-base tracking-wider uppercase mb-1">
+                ASK FOR SAHIL
+              </h3>
+              <p id="voiceStatusText" class="text-indigo-200 text-xs font-medium">
+                Click here to talk to Sahil
+              </p>
+            `;
+            lucide.createIcons();
+            setTimeout(() => { boxContent.style.opacity = '1'; }, 50);
+          }
+        }, 300);
+
+        setCubicalState();
+      }
+    }
+
+    function setCubicalState() {
+      const outer = document.getElementById('jarvis-outer');
+      if (!outer) return;
+      outer.style.borderRadius = '32px';
+    }
+
+    function startVoiceMorphAnimation() {
+      clearInterval(morphInterval);
+      morphInterval = setInterval(() => {
+        const outer = document.getElementById('jarvis-outer');
+        if (!outer) return;
+
+        const f1 = (Math.random() - 0.5) * 30;
+        const f2 = (Math.random() - 0.5) * 30;
+        const r1 = Math.round(42 + f1);
+        const r2 = Math.round(58 - f1);
+        const r3 = Math.round(55 + f2);
+        const r4 = Math.round(45 - f2);
+
+        outer.style.borderRadius = `${r1}% ${r2}% ${r3}% ${r4}% / ${r4}% ${r1}% ${r2}% ${r3}%`;
+      }, 180);
+    }
+
+    function stopVoiceMorphAnimation() {
+      clearInterval(morphInterval);
+      setCubicalState();
     }
 
     function startSahilListeningState() {
       if (!isAgentActive) return;
-      const statusText = document.getElementById('voiceStatusText');
-      if(statusText) statusText.innerText = 'Listening...';
-      try {
-        if(sahilRecognition) sahilRecognition.start();
-      } catch(e) {}
-    }
-
-    function stopSahilAgentSession() {
-      isAgentActive = false;
+      isAgentListening = true;
       isAgentProcessing = false;
-      if(sahilRecognition) {
-        try { sahilRecognition.stop(); } catch(e) {}
-      }
-
-      const outerBox = document.getElementById('jarvis-outer');
-      const coreIndicator = document.getElementById('jarvis-core-indicator');
       const statusText = document.getElementById('voiceStatusText');
-
-      if(outerBox) {
-        outerBox.classList.remove('border-indigo-500', 'scale-105', 'shadow-indigo-500/50');
-        outerBox.style.background = '';
-      }
-      if(coreIndicator) coreIndicator.style.opacity = '0';
-      if(statusText) statusText.innerText = 'Click here to talk to Sahil';
-      window.speechSynthesis.cancel();
+      if (statusText) statusText.innerText = 'You talk...';
+      startVoiceMorphAnimation();
+      try { sahilRecognition.start(); } catch(e){}
     }
 
-    function speakSahilReply(text) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1.05;
-      utterance.pitch = 1.0;
-
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v => v.lang === 'en-IN' || v.lang === 'hi-IN' || v.lang.includes('en-GB'));
-      if (preferredVoice) utterance.voice = preferredVoice;
-
-      utterance.onend = function() {
-        isAgentProcessing = false;
-        if (isAgentActive) startSahilListeningState();
-      };
-
-      utterance.onerror = function() {
-        isAgentProcessing = false;
-        if (isAgentActive) startSahilListeningState();
-      };
-
-      window.speechSynthesis.speak(utterance);
+    function stopSahilListeningState() {
+      isAgentListening = false;
+      stopVoiceMorphAnimation();
     }
 
-    // BACKEND QUERY HANDLER & AUTOMATIC WHATSAPP SENDER INTENT
     async function sendQueryToSahilBackend(userText) {
       if (!isAgentActive) return;
       isAgentProcessing = true;
@@ -932,16 +938,14 @@
           sahilHistory.push({ role: 'user', text: userText });
           sahilHistory.push({ role: 'model', text: data.reply });
           
-          const q = userText.toLowerCase();
+          // FULLY AUTOMATED INTENT & NAVIGATION PARSER (No confirm popup, direct smooth scroll)
+          const lowerUserQuery = userText.toLowerCase();
 
-          // Navigation & Action Intents
-          const isCapIntent = q.includes('capabilities') || q.includes('tools') || q.includes('skills') || q.includes('केपेबिलिटीज') || q.includes('स्किल');
-          const isIdIntent = q.includes('identity') || q.includes('about') || q.includes('who are you') || q.includes('परिचय');
-          const isShowcaseIntent = q.includes('showcase') || q.includes('poster') || q.includes('thumbnail') || q.includes('works') || q.includes('work') || q.includes('portfolio') || q.includes('डिजाइन') || q.includes('पोस्टर') || q.includes('थंबनेल');
-          const isConnectIntent = q.includes('connect') || q.includes('contact') || q.includes('whatsapp') || q.includes('details') || q.includes('project') || q.includes('hire') || q.includes('like your work') || q.includes('कंटेक्ट') || q.includes('मैसेज') || q.includes('डिटेल') || q.includes('प्रोजेक्ट') || q.includes('बात') || q.includes('पसंद');
-          
-          // EXTRA INTELLIGENCE: Auto WhatsApp Trigger if user gives details or asks to send message
-          const isSendWhatsAppIntent = q.includes('send') || q.includes('bhej do') || q.includes('whatsapp par') || q.includes('number') || q.includes('email') || q.includes('name') || q.includes('भेज') || q.includes('मेरा नाम') || q.includes('मेरा नंबर');
+          const isCapIntent = lowerUserQuery.includes('capabilities') || lowerUserQuery.includes('capability') || lowerUserQuery.includes('toolkit') || lowerUserQuery.includes('skills') || lowerUserQuery.includes('cap') || lowerUserQuery.includes('केपेबिलिटीज');
+          const isIdIntent = lowerUserQuery.includes('identity') || lowerUserQuery.includes('about') || lowerUserQuery.includes('profile') || lowerUserQuery.includes('intro') || lowerUserQuery.includes('परिचय') || lowerUserQuery.includes('बारे');
+          const isShowcaseIntent = lowerUserQuery.includes('showcase') || lowerUserQuery.includes('poster') || lowerUserQuery.includes('thumbnail') || lowerUserQuery.includes('video') || lowerUserQuery.includes('works') || lowerUserQuery.includes('डिजाइन') || lowerUserQuery.includes('पोस्टर') || lowerUserQuery.includes('काम');
+          const isHomeIntent = lowerUserQuery.includes('home') || lowerUserQuery.includes('main') || lowerUserQuery.includes('top') || lowerUserQuery.includes('होमपेज') || lowerUserQuery.includes('शुरुआत');
+          const isConnectIntent = lowerUserQuery.includes('connect') || lowerUserQuery.includes('contact') || lowerUserQuery.includes('message') || lowerUserQuery.includes('whatsapp') || lowerUserQuery.includes('कंटेक्ट') || lowerUserQuery.includes('मैसेज');
 
           if (isCapIntent) {
             document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
@@ -949,24 +953,10 @@
             document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
           } else if (isShowcaseIntent) {
             document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
-          } else if (isConnectIntent || isSendWhatsAppIntent) {
+          } else if (isConnectIntent) {
             document.getElementById('connect').scrollIntoView({ behavior: 'smooth' });
-            
-            // Auto fill form and trigger WhatsApp if details are provided verbally
-            const msgBox = document.getElementById('user_message');
-            if (msgBox) {
-              msgBox.value = `Hi Sahil, sent via Voice Agent. User spoken details/message: "${userText}"`;
-            }
-
-            // If user explicitly asks to send or gives details, open WhatsApp automatically in background!
-            if (isSendWhatsAppIntent) {
-              const name = "Client via Voice";
-              const phone = "9971454170";
-              const fullText = encodeURIComponent(`Hello Sahil, I spoke with your voice agent. Here are my details/message:\n"${userText}"`);
-              setTimeout(() => {
-                window.open(`https://wa.me/91${phone}?text=${fullText}`, '_blank');
-              }, 1500);
-            }
+          } else if (isHomeIntent) {
+            document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
           }
 
           speakSahilReply(data.reply);
@@ -975,6 +965,46 @@
         isAgentProcessing = false;
         if (isAgentActive) startSahilListeningState();
       }
+    }
+
+    function speakSahilReply(text) {
+      if (!isAgentActive) return;
+      const statusText = document.getElementById('voiceStatusText');
+      if (statusText) statusText.innerText = 'Sahil is speaking...';
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      const isHindi = /[\u0900-\u097F]/.test(text);
+
+      if (sahilVoices.length === 0) sahilVoices = window.speechSynthesis.getVoices();
+
+      let selectedVoice = null;
+      if (isHindi) {
+        utterance.lang = 'hi-IN';
+        selectedVoice = sahilVoices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN' || v.name.includes('Hindi') || v.name.includes('Google हिन्दी'));
+      } else {
+        utterance.lang = 'en-IN';
+        selectedVoice = sahilVoices.find(v => v.lang === 'en-IN' || v.lang === 'en_IN' || v.name.includes('India'));
+      }
+
+      if (selectedVoice) utterance.voice = selectedVoice;
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+
+      startVoiceMorphAnimation();
+
+      const onAudioEnd = () => {
+        isAgentProcessing = false;
+        stopVoiceMorphAnimation();
+        if (isAgentActive) {
+          startSahilListeningState();
+        }
+      };
+
+      utterance.onend = onAudioEnd;
+      utterance.onerror = onAudioEnd;
+
+      window.speechSynthesis.speak(utterance);
     }
   </script>
 </body>
