@@ -81,12 +81,11 @@
   const siteData = `
 Name: Sahil Kumar
 Role: Visual Content Designer & Video Editor
-Age: 19 years old (Born May 11, 2007)
 Location: India
 Primary Skills: AI Posters, High-CTR Thumbnails, CapCut Motion Video Editing, Short-form reels.
 Tools Used: Canva, CapCut, Google AI Studio, LLM Workflows.
-Experience & Projects: Completed over 17 visual and video editing projects for clients.
-Philosophy: Focuses on practical skills, visual perfection, and speed rather than formal degrees.
+Philosophy: Focuses on high-end visual execution, practical design skills, speed, and CTR results.
+Age: 19 years old (ONLY mention if explicitly asked by the user).
 `;
 
   if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -123,7 +122,6 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
       stopListening();
     } else {
       if (!hasGreeted) {
-        // High-converting English initial greeting
         const initialGreeting = "Hey there! I'm Sahil Kumar. Welcome to my portfolio—what high-converting design or video project are we working on today?";
         hasGreeted = true;
         log(`> Sahil: ${initialGreeting}`);
