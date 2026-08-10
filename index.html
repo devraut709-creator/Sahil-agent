@@ -31,7 +31,7 @@
             'blob-pulse': 'blob 10s infinite ease-in-out',
             'float': 'float 6s ease-in-out infinite',
             'earth-spin': 'earthSpin 25s linear infinite',
-            'matrix-glow': 'matrixGlow 3s ease-in-out infinite',
+            'gradient-shift': 'gradientShift 6s ease infinite',
           },
           keyframes: {
             blob: {
@@ -46,9 +46,10 @@
               '0%': { transform: 'rotate(0deg)' },
               '100%': { transform: 'rotate(360deg)' },
             },
-            matrixGlow: {
-              '0%, 100%': { textShadow: '0 0 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(168, 85, 247, 0.2)' },
-              '50%': { textShadow: '0 0 30px rgba(99, 102, 241, 0.8), 0 0 60px rgba(236, 72, 153, 0.5)' },
+            gradientShift: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+              '100%': { backgroundPosition: '0% 50%' },
             }
           }
         }
@@ -82,6 +83,13 @@
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background: #cbd5e1;
       border-radius: 3px;
+    }
+    .artistic-name-gradient {
+      background: linear-gradient(-45deg, #6366f1, #a855f7, #ec4899, #3b82f6);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 6s ease infinite;
     }
   </style>
 </head>
@@ -132,8 +140,8 @@
       </div>
 
       <div class="h-20 sm:h-32 md:h-40 lg:h-48 flex items-center justify-center w-full max-w-5xl overflow-hidden px-2" data-aos="zoom-in" data-aos-duration="1200">
-        <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight animate-matrix-glow">
-          PORTFOLIO GUY
+        <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight artistic-name-gradient transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight">
+          PORTFOLIO BY
         </h1>
       </div>
 
@@ -664,20 +672,18 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       const heroTitle = document.getElementById('hero-title');
-      
-      // Futuristic smooth text-morph animation from "PORTFOLIO GUY" to "SAHIL KUMAR"
       setTimeout(() => {
         heroTitle.style.opacity = '0';
-        heroTitle.style.transform = 'translateY(-20px) scale(0.95)';
+        heroTitle.style.transform = 'translateY(-15px)';
         setTimeout(() => {
           heroTitle.textContent = 'SAHIL KUMAR';
-          heroTitle.style.transform = 'translateY(20px) scale(1.05)';
+          heroTitle.style.transform = 'translateY(15px)';
           setTimeout(() => {
             heroTitle.style.opacity = '1';
-            heroTitle.style.transform = 'translateY(0px) scale(1)';
+            heroTitle.style.transform = 'translateY(0px)';
           }, 50);
-        }, 400);
-      }, 1200);
+        }, 350);
+      }, 1000);
 
       loadCountriesIntoDropdown();
     });
