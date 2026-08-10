@@ -31,6 +31,7 @@
             'blob-pulse': 'blob 10s infinite ease-in-out',
             'float': 'float 6s ease-in-out infinite',
             'earth-spin': 'earthSpin 25s linear infinite',
+            'matrix-glow': 'matrixGlow 3s ease-in-out infinite',
           },
           keyframes: {
             blob: {
@@ -44,6 +45,10 @@
             earthSpin: {
               '0%': { transform: 'rotate(0deg)' },
               '100%': { transform: 'rotate(360deg)' },
+            },
+            matrixGlow: {
+              '0%, 100%': { textShadow: '0 0 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(168, 85, 247, 0.2)' },
+              '50%': { textShadow: '0 0 30px rgba(99, 102, 241, 0.8), 0 0 60px rgba(236, 72, 153, 0.5)' },
             }
           }
         }
@@ -127,8 +132,8 @@
       </div>
 
       <div class="h-20 sm:h-32 md:h-40 lg:h-48 flex items-center justify-center w-full max-w-5xl overflow-hidden px-2" data-aos="zoom-in" data-aos-duration="1200">
-        <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight">
-          PORTFOLIO BY
+        <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight animate-matrix-glow">
+          PORTFOLIO GUY
         </h1>
       </div>
 
@@ -659,18 +664,20 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       const heroTitle = document.getElementById('hero-title');
+      
+      // Futuristic smooth text-morph animation from "PORTFOLIO GUY" to "SAHIL KUMAR"
       setTimeout(() => {
         heroTitle.style.opacity = '0';
-        heroTitle.style.transform = 'translateY(-15px)';
+        heroTitle.style.transform = 'translateY(-20px) scale(0.95)';
         setTimeout(() => {
           heroTitle.textContent = 'SAHIL KUMAR';
-          heroTitle.style.transform = 'translateY(15px)';
+          heroTitle.style.transform = 'translateY(20px) scale(1.05)';
           setTimeout(() => {
             heroTitle.style.opacity = '1';
-            heroTitle.style.transform = 'translateY(0px)';
+            heroTitle.style.transform = 'translateY(0px) scale(1)';
           }, 50);
-        }, 350);
-      }, 1000);
+        }, 400);
+      }, 1200);
 
       loadCountriesIntoDropdown();
     });
