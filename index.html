@@ -32,6 +32,7 @@
             'float': 'float 6s ease-in-out infinite',
             'earth-spin': 'earthSpin 25s linear infinite',
             'gradient-flow': 'gradientFlow 4s ease infinite',
+            'hero-circle-move': 'heroCircleMove 8s ease-in-out infinite',
           },
           keyframes: {
             blob: {
@@ -50,6 +51,10 @@
               '0%': { backgroundPosition: '0% 50%' },
               '50%': { backgroundPosition: '100% 50%' },
               '100%': { backgroundPosition: '0% 50%' },
+            },
+            heroCircleMove: {
+              '0%, 100%': { transform: 'translate(-50%, -50%) scale(1) rotate(0deg)', opacity: '0.6' },
+              '50%': { transform: 'translate(-50%, -50%) scale(1.12) rotate(180deg)', opacity: '0.85' },
             }
           }
         }
@@ -140,8 +145,13 @@
         <span>Available for Select Projects & Roles</span>
       </div>
 
-      <div class="h-20 sm:h-32 md:h-40 lg:h-48 flex items-center justify-center w-full max-w-5xl overflow-hidden px-2" data-aos="zoom-in" data-aos-duration="1200">
-        <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight animated-flowing-gradient transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight py-4">
+      <!-- HERO TITLE CONTAINER WITH MOVING BLUE & LIGHT PURPLE CIRCLE HIERARCHY -->
+      <div class="relative h-20 sm:h-32 md:h-40 lg:h-48 flex items-center justify-center w-full max-w-5xl overflow-visible px-2" data-aos="zoom-in" data-aos-duration="1200">
+        
+        <!-- Animated Blue & Light Purple Mix Circle Background for Visual Hierarchy & Focus -->
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[420px] md:w-[500px] h-[280px] sm:h-[420px] md:h-[500px] rounded-full bg-gradient-to-r from-blue-500/30 via-indigo-500/25 to-purple-400/30 blur-2xl sm:blur-3xl pointer-events-none z-0 animate-hero-circle-move"></div>
+
+        <h1 id="hero-title" class="relative z-10 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight animated-flowing-gradient transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight py-4">
           PORTFOLIO BY
         </h1>
       </div>
