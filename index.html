@@ -67,6 +67,16 @@
   let isProcessing = false;
   let recognition;
   let conversationHistory = [];
+  let availableVoices = [];
+
+  // Pre-load voices on browser startup
+  function loadVoices() {
+    availableVoices = window.speechSynthesis.getVoices();
+  }
+  if ('speechSynthesis' in window) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
 
   const siteData = `
 Name: Sahil Kumar
@@ -170,15 +180,42 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
 
     const utterance = new SpeechSynthesisUtterance(text);
     
-    // Auto detect Hindi text vs English text for native TTS voice
+    // Check if reply contains Hindi characters
     const isHindi = /[\u0900-\u097F]/.test(text);
-    utterance.lang = isHindi ? 'hi-IN' : 'en-US';
-
-    const voices = window.speechSynthesis.getVoices();
-    const targetVoice = voices.find(v => v.lang.includes(isHindi ? 'hi' : 'en'));
-    if (targetVoice) {
-      utterance.voice = targetVoice;
+    
+    // Ensure list is refreshed
+    if (availableVoices.length === 0) {
+      availableVoices = window.speechSynthesis.getVoices();
     }
+
+    let selectedVoice = null;
+
+    if (isHindi) {
+      utterance.lang = 'hi-IN';
+      // Priority for Native Indian Hindi voices (Google/Microsoft/Apple Hindi)
+      selectedVoice = availableVoices.find(v => 
+        v.lang === 'hi-IN' || 
+        v.lang === 'hi_IN' || 
+        v.name.includes('Hindi') || 
+        v.name.includes('Google हिन्दी')
+      );
+    } else {
+      utterance.lang = 'en-IN'; // Set Indian English for natural accent
+      // Priority for Indian English accent
+      selectedVoice = availableVoices.find(v => 
+        v.lang === 'en-IN' || 
+        v.lang === 'en_IN' || 
+        v.name.includes('India')
+      );
+    }
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+
+    // Natural Indian pitch and speed adjustment
+    utterance.rate = 1.0; 
+    utterance.pitch = 1.0;
 
     const onAudioEnd = () => {
       isProcessing = false;
