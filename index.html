@@ -64,6 +64,7 @@
 
 <script>
   let isListening = false;
+  let isProcessing = false;
   let recognition;
   let conversationHistory = [];
 
@@ -85,9 +86,13 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
     recognition.interimResults = false;
 
     recognition.onresult = async (event) => {
+      if (isProcessing) return;
+      
       const lastIndex = event.results.length - 1;
       const transcript = event.results[lastIndex][0].transcript.trim();
       
+      if (!transcript) return;
+
       log(`> User Said: ${transcript}`);
       stopListening();
       
@@ -95,7 +100,9 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
     };
 
     recognition.onerror = (err) => {
-      log(`> Speech Error: ${err.error}`);
+      if (err.error !== 'no-speech') {
+        log(`> Speech Error: ${err.error}`);
+      }
     };
   } else {
     alert('Speech Recognition is not supported in this browser.');
@@ -111,6 +118,7 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
 
   function startListening() {
     isListening = true;
+    isProcessing = false;
     document.getElementById('toggleBtn').innerText = 'Stop Test';
     document.getElementById('toggleBtn').classList.add('active');
     document.getElementById('statusText').innerText = 'Status: Listening... (Speak naturally)';
@@ -121,11 +129,13 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
     isListening = false;
     document.getElementById('toggleBtn').innerText = 'Start Test';
     document.getElementById('toggleBtn').classList.remove('active');
-    document.getElementById('statusText').innerText = 'Status: Processing...';
     try { recognition.stop(); } catch(e){}
   }
 
   async function sendToBackend(userText) {
+    isProcessing = true;
+    document.getElementById('statusText').innerText = 'Status: Processing...';
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -147,38 +157,41 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
 
         speakReply(data.reply);
       } else {
-        log(`> Backend Error: ${data.error}`);
-        speakReply("Connection issue due to rate limits. Please try again in a few seconds.");
+        log(`> System Notice: ${data.error}`);
+        speakReply(data.error || "Please wait a moment before speaking again.");
       }
     } catch (err) {
       log(`> Network Error: ${err.message}`);
+      isProcessing = false;
     }
   }
 
   function speakReply(text) {
     document.getElementById('statusText').innerText = 'Status: Sahil Speaking...';
-    window.speechSynthesis.cancel(); // Clear previous audio buffer
+    window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
     
-    // Detect Hindi text (Devanagari script)
     const isHindi = /[\u0900-\u097F]/.test(text);
     utterance.lang = isHindi ? 'hi-IN' : 'en-US';
 
-    // Try finding exact voice match for language
     const voices = window.speechSynthesis.getVoices();
     const targetVoice = voices.find(v => v.lang.includes(isHindi ? 'hi' : 'en'));
     if (targetVoice) {
       utterance.voice = targetVoice;
     }
 
-    utterance.onend = () => {
-      startListening();
+    const onAudioEnd = () => {
+      document.getElementById('statusText').innerText = 'Status: Cooldown (3s)...';
+      // 3-second cooldown to preserve Free Tier quota limits
+      setTimeout(() => {
+        isProcessing = false;
+        startListening();
+      }, 3000);
     };
 
-    utterance.onerror = () => {
-      startListening();
-    };
+    utterance.onend = onAudioEnd;
+    utterance.onerror = onAudioEnd;
 
     window.speechSynthesis.speak(utterance);
   }
