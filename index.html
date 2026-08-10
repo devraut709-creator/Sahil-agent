@@ -156,13 +156,11 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
         conversationHistory.push({ role: 'model', text: data.reply });
 
         speakReply(data.reply);
-      } else {
-        log(`> System Notice: ${data.error}`);
-        speakReply(data.error || "Please wait a moment before speaking again.");
       }
     } catch (err) {
       log(`> Network Error: ${err.message}`);
       isProcessing = false;
+      startListening();
     }
   }
 
@@ -172,6 +170,7 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
 
     const utterance = new SpeechSynthesisUtterance(text);
     
+    // Auto detect Hindi text vs English text for native TTS voice
     const isHindi = /[\u0900-\u097F]/.test(text);
     utterance.lang = isHindi ? 'hi-IN' : 'en-US';
 
@@ -182,12 +181,8 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
     }
 
     const onAudioEnd = () => {
-      document.getElementById('statusText').innerText = 'Status: Cooldown (3s)...';
-      // 3-second cooldown to preserve Free Tier quota limits
-      setTimeout(() => {
-        isProcessing = false;
-        startListening();
-      }, 3000);
+      isProcessing = false;
+      startListening();
     };
 
     utterance.onend = onAudioEnd;
