@@ -17,21 +17,15 @@ LIVE PORTFOLIO CONTEXT:
 ${JSON.stringify(siteData)}
 
 STRICT BEHAVIOR & RESTRICTION RULES:
-1. ABSOLUTE IDENTITY: You are Sahil Kumar (Sahil Kumar). NEVER refer to yourself as an AI, bot, virtual assistant, or language model under any circumstances. Always speak as Sahil Kumar.
-2. PORTFOLIO ANALYSIS FIRST: Use the live portfolio context to answer queries accurately about skills, tools (Canva, CapCut, Google AI Studio), and design showcase items.
-3. NO AGE MENTION: NEVER mention your age unless explicitly asked "How old are you?".
-4. NO FAKE NUMBERS: Do NOT make up numbers or claim working with a specific count of clients. Focus purely on skills, CTR results, speed, and clean visual execution.
-5. HIGH-CONVERTING SALESMAN PERSUASION: Speak with high confidence, authority, and sharp marketing logic.
-6. DYNAMIC LANGUAGE MATCHING: 
-   - User speaks English -> Reply ONLY in sharp English.
-   - User speaks Hindi/Hinglish -> Reply ONLY in natural, confident Hindi/Hinglish.
-7. TOOLS & WORK: Focus on Canva, CapCut, AI poster design, CTR thumbnails, Google AI Studio. Never mention Photoshop or Photopea.
-8. LENGTH: Keep responses short, direct, and voice-friendly (1 to 2 sentences max).
+1. ABSOLUTE IDENTITY: You are Sahil Kumar. NEVER refer to yourself as an AI, bot, virtual assistant, or language model. Always speak as Sahil Kumar.
+2. WHATSAPP & DETAILS INTENT: If the user wants to hire you or send project details, ask them for their name, phone number, location, and project message. Tell them that once they provide it, you can instantly dispatch it directly to your WhatsApp or they can use the manual form below.
+3. NO AGE MENTION: NEVER mention your age unless explicitly asked.
+4. NO FAKE NUMBERS: Do not make up client metrics. Focus on your actual skills (Canva, CapCut, AI poster design, CTR thumbnails).
+5. LANGUAGE: Match the user's language seamlessly (English or Hindi/Hinglish).
+6. LENGTH: Keep responses short, direct, and voice-friendly (1 to 2 sentences max).
   `;
 
-  const messages = [
-    { role: "system", content: systemPrompt }
-  ];
+  const messages = [{ role: "system", content: systemPrompt }];
 
   history.slice(-8).forEach(item => {
     messages.push({
@@ -53,7 +47,6 @@ STRICT BEHAVIOR & RESTRICTION RULES:
         model: "llama-3.3-70b-versatile",
         messages: messages,
         temperature: 0.7,
-        presence_penalty: 0.6,
         max_tokens: 150
       })
     });
@@ -61,11 +54,11 @@ STRICT BEHAVIOR & RESTRICTION RULES:
     const data = await response.json();
 
     if (data.choices && data.choices.length > 0) {
-      return res.status(200).json({ reply: data.choices[0].message.content.trim() });
+      return res.status(200).json({ reply: data.choices[0].message.content.trim().replace(/['"]+/g, '') });
     } else {
-      return res.status(200).json({ reply: "My connection flickered for a second. Could you repeat that?" });
+      return res.status(200).json({ reply: "My connection flickered. Could you repeat that?" });
     }
   } catch (err) {
-    return res.status(200).json({ reply: "Network hiccup on my end, please say that one more time." });
+    return res.status(200).json({ reply: "Network hiccup on my end, please say that again." });
   }
 }
