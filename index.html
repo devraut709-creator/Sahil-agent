@@ -148,7 +148,7 @@
       </div>
     </section>
 
-    <!-- IDENTITY SECTION WITH CONTEXTUAL AGENT -->
+    <!-- IDENTITY SECTION WITH STRICT AGENT -->
     <section id="about" class="py-20 scroll-mt-24">
       <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl shadow-slate-900/5 relative overflow-hidden" data-aos="fade-up" data-aos-duration="1000">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -938,27 +938,30 @@
           sahilHistory.push({ role: 'user', text: userText });
           sahilHistory.push({ role: 'model', text: data.reply });
           
-          // Strict Explicit Navigation Control: Only scroll when user explicitly requests navigation commands
+          // Ultra-Robust Intent & Navigation Parser with Dynamic Question Prompting
           const lowerUserQuery = userText.toLowerCase();
-          const isExplicitNav = lowerUserQuery.includes('le chalo') || lowerUserQuery.includes('take me') || lowerUserQuery.includes('scroll to') || lowerUserQuery.includes('open section') || lowerUserQuery.includes('par jao') || lowerUserQuery.includes('पेज पर ले जाओ');
+          const lowerReply = data.reply.toLowerCase();
 
-          if (isExplicitNav) {
-            if (lowerUserQuery.includes('capabilit') || lowerUserQuery.includes('केपेबिलिटीज')) {
-              if (confirm("Would you like me to take you directly to the Capabilities section?")) {
-                document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
-              }
-            } else if (lowerUserQuery.includes('identity') || lowerUserQuery.includes('about') || lowerUserQuery.includes('profile') || lowerUserQuery.includes('परिचय')) {
-              if (confirm("Would you like me to scroll up to the Identity section?")) {
-                document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-              }
-            } else if (lowerUserQuery.includes('showcase') || lowerUserQuery.includes('works') || lowerUserQuery.includes('portfolio') || lowerUserQuery.includes('शोज़केस')) {
-              if (confirm("Would you like me to take you to the Showcase section?")) {
-                document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
-              }
-            } else if (lowerUserQuery.includes('home') || lowerUserQuery.includes('top') || lowerUserQuery.includes('main') || lowerUserQuery.includes('होम')) {
-              if (confirm("Would you like me to take you to the top of the homepage?")) {
-                document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
-              }
+          const isCapIntent = lowerUserQuery.includes('capabilities') || lowerUserQuery.includes('capability') || lowerUserQuery.includes('toolkit') || lowerUserQuery.includes('skills') || lowerUserQuery.includes('page') && (lowerUserQuery.includes('cap') || lowerUserQuery.includes('केपेबिलिटीज'));
+          const isIdIntent = lowerUserQuery.includes('identity') || lowerUserQuery.includes('about') || lowerUserQuery.includes('profile') || lowerUserQuery.includes('intro') || lowerUserQuery.includes('परिचय');
+          const isShowcaseIntent = lowerUserQuery.includes('showcase') || lowerUserQuery.includes('poster') || lowerUserQuery.includes('thumbnail') || lowerUserQuery.includes('video') || lowerUserQuery.includes('works') || lowerUserQuery.includes('डिजाइन') || lowerUserQuery.includes('पोस्टर');
+          const isHomeIntent = lowerUserQuery.includes('home') || lowerUserQuery.includes('main') || lowerUserQuery.includes('top') || lowerUserQuery.includes('होमपेज') || lowerUserQuery.includes('शुरुआत');
+
+          if (isCapIntent || lowerReply.includes('capabilities')) {
+            if (confirm("Would you like me to take you directly to the Capabilities section?")) {
+              document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
+            }
+          } else if (isIdIntent || lowerReply.includes('identity') || lowerReply.includes('about')) {
+            if (confirm("Would you like me to scroll up to the Identity section?")) {
+              document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+            }
+          } else if (isShowcaseIntent || lowerReply.includes('showcase')) {
+            if (confirm("Would you like me to take you to the Showcase section?")) {
+              document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
+            }
+          } else if (isHomeIntent) {
+            if (confirm("Would you like me to take you to the top of the homepage?")) {
+              document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
             }
           }
 
