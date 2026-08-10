@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sahil AI - Voice Agent</title>
+  <title>Sahil AI - Serverless Voice Agent</title>
   <style>
     body {
       background-color: #0f172a;
@@ -65,7 +65,7 @@
 <script>
   let isListening = false;
   let recognition;
-  let conversationHistory = []; // Keeps track of conversation memory
+  let conversationHistory = [];
 
   const siteData = `
 Name: Sahil Kumar
@@ -142,14 +142,13 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
       if (data.reply) {
         log(`> Sahil: ${data.reply}`);
         
-        // Update local history memory
         conversationHistory.push({ role: 'user', text: userText });
         conversationHistory.push({ role: 'model', text: data.reply });
 
         speakReply(data.reply);
       } else {
         log(`> Backend Error: ${data.error}`);
-        speakReply("I had a quick connection issue. Please speak again.");
+        speakReply("Connection issue due to rate limits. Please try again in a few seconds.");
       }
     } catch (err) {
       log(`> Network Error: ${err.message}`);
@@ -158,9 +157,26 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
 
   function speakReply(text) {
     document.getElementById('statusText').innerText = 'Status: Sahil Speaking...';
+    window.speechSynthesis.cancel(); // Clear previous audio buffer
+
     const utterance = new SpeechSynthesisUtterance(text);
     
+    // Detect Hindi text (Devanagari script)
+    const isHindi = /[\u0900-\u097F]/.test(text);
+    utterance.lang = isHindi ? 'hi-IN' : 'en-US';
+
+    // Try finding exact voice match for language
+    const voices = window.speechSynthesis.getVoices();
+    const targetVoice = voices.find(v => v.lang.includes(isHindi ? 'hi' : 'en'));
+    if (targetVoice) {
+      utterance.voice = targetVoice;
+    }
+
     utterance.onend = () => {
+      startListening();
+    };
+
+    utterance.onerror = () => {
       startListening();
     };
 
