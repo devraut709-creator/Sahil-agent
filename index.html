@@ -103,6 +103,21 @@
       animation: gradientFlow 4s ease infinite;
       filter: drop-shadow(0px 4px 12px rgba(147, 51, 234, 0.25));
     }
+    /* Smooth Description Modal Drawer Styles */
+    .desc-drawer {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease-in-out, padding 0.3s ease;
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+    .desc-drawer.open {
+      max-height: 250px;
+      opacity: 1;
+      padding-top: 12px;
+      padding-bottom: 4px;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen relative overflow-x-hidden">
@@ -283,9 +298,10 @@
       </div>
 
       <div id="showcase-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        <!-- VIDEO ITEMS -->
-        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1h79KAb3ZBNRAJrTjdzMFjdvnQBNavIot/preview')">
-          <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+        
+        <!-- VIDEO ITEM 1 -->
+        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1h79KAb3ZBNRAJrTjdzMFjdvnQBNavIot/preview')">
             <iframe src="https://drive.google.com/file/d/1h79KAb3ZBNRAJrTjdzMFjdvnQBNavIot/preview" class="w-full h-full border-0 object-cover pointer-events-none"></iframe>
             <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <div class="px-4 py-2 rounded-xl bg-white/90 text-slate-900 font-bold text-xs shadow-lg flex items-center gap-2">
@@ -296,14 +312,23 @@
           </div>
           <div class="p-4 flex flex-col justify-between flex-grow">
             <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
+                <button onclick="toggleDescription('desc-vid-1')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
               <h3 class="font-bold text-slate-900 text-sm mt-1">Short-Form Motion Sequence 01</h3>
+            </div>
+            <div id="desc-vid-1" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Executed dynamic short-form pacing with customized text highlights, professional sound effect syncing, and high-retention hook transitions tailored for audience engagement.
             </div>
           </div>
         </div>
 
-        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/17HBVDXnelfrCQfVefIguzRhhDHKZRpQ_/preview')">
-          <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+        <!-- VIDEO ITEM 2 -->
+        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/17HBVDXnelfrCQfVefIguzRhhDHKZRpQ_/preview')">
             <iframe src="https://drive.google.com/file/d/17HBVDXnelfrCQfVefIguzRhhDHKZRpQ_/preview" class="w-full h-full border-0 object-cover pointer-events-none"></iframe>
             <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <div class="px-4 py-2 rounded-xl bg-white/90 text-slate-900 font-bold text-xs shadow-lg flex items-center gap-2">
@@ -314,14 +339,23 @@
           </div>
           <div class="p-4 flex flex-col justify-between flex-grow">
             <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
+                <button onclick="toggleDescription('desc-vid-2')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
               <h3 class="font-bold text-slate-900 text-sm mt-1">Short-Form Motion Sequence 02</h3>
+            </div>
+            <div id="desc-vid-2" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Crafted smooth visual transitions and rapid timeline cutting to keep viewer attention locked from second one through the final call to action.
             </div>
           </div>
         </div>
 
-        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1GPqhLe5C9tN1VE7IoH-k7pWCrGJ_ie11/preview')">
-          <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+        <!-- VIDEO ITEM 3 -->
+        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1GPqhLe5C9tN1VE7IoH-k7pWCrGJ_ie11/preview')">
             <iframe src="https://drive.google.com/file/d/1GPqhLe5C9tN1VE7IoH-k7pWCrGJ_ie11/preview" class="w-full h-full border-0 object-cover pointer-events-none"></iframe>
             <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <div class="px-4 py-2 rounded-xl bg-white/90 text-slate-900 font-bold text-xs shadow-lg flex items-center gap-2">
@@ -332,14 +366,23 @@
           </div>
           <div class="p-4 flex flex-col justify-between flex-grow">
             <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
+                <button onclick="toggleDescription('desc-vid-3')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
               <h3 class="font-bold text-slate-900 text-sm mt-1">Short-Form Motion Sequence 03</h3>
+            </div>
+            <div id="desc-vid-3" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Integrated clean typography overlays and calibrated color grading to establish a professional, high-end look tailored for financial and creative storytelling.
             </div>
           </div>
         </div>
 
-        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1o5vVkw-PHaMUuo_W-dCdBx-2-xsNPru3/preview')">
-          <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+        <!-- VIDEO ITEM 4 -->
+        <div class="showcase-card item-motion glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer" onclick="openVideoLightbox('https://drive.google.com/file/d/1o5vVkw-PHaMUuo_W-dCdBx-2-xsNPru3/preview')">
             <iframe src="https://drive.google.com/file/d/1o5vVkw-PHaMUuo_W-dCdBx-2-xsNPru3/preview" class="w-full h-full border-0 object-cover pointer-events-none"></iframe>
             <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <div class="px-4 py-2 rounded-xl bg-white/90 text-slate-900 font-bold text-xs shadow-lg flex items-center gap-2">
@@ -350,180 +393,329 @@
           </div>
           <div class="p-4 flex flex-col justify-between flex-grow">
             <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Motion Edit</span>
+                <button onclick="toggleDescription('desc-vid-4')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
               <h3 class="font-bold text-slate-900 text-sm mt-1">Short-Form Motion Sequence 04</h3>
+            </div>
+            <div id="desc-vid-4" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Engineered precise subtitle framing and graphic callouts to deliver crisp information delivery with engaging visual rhythm.
             </div>
           </div>
         </div>
 
-        <!-- THUMBNAIL / COVER ITEMS -->
-        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1sM57KP0gJF3Q6FsiI6Ex3ujwogTQNWRx')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2">
+        <!-- THUMBNAIL / COVER ITEM 1 -->
+        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1sM57KP0gJF3Q6FsiI6Ex3ujwogTQNWRx')">
             <img src="https://lh3.googleusercontent.com/d/1sM57KP0gJF3Q6FsiI6Ex3ujwogTQNWRx" alt="Thumbnail 1" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 01</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
+                <button onclick="toggleDescription('desc-thumb-1')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 01</h3>
+            </div>
+            <div id="desc-thumb-1" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Designed a high-CTR thumbnail featuring strong focal contrast, expressive framing, and bold typography optimized for click-through rate performance.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1NXODv7ajXKeCuBlNzyekeC29xHwPDiIk')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2">
+        <!-- THUMBNAIL / COVER ITEM 2 -->
+        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1NXODv7ajXKeCuBlNzyekeC29xHwPDiIk')">
             <img src="https://lh3.googleusercontent.com/d/1NXODv7ajXKeCuBlNzyekeC29xHwPDiIk" alt="Thumbnail 2" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 02</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
+                <button onclick="toggleDescription('desc-thumb-2')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 02</h3>
+            </div>
+            <div id="desc-thumb-2" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Created an eye-catching thumbnail composition utilizing clean color grading, strategic object placement, and compelling visual hierarchy to grab viewer attention instantly.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1C3Mye_IzQZzwRgfVJsVGeO2jBaYsat0n')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2">
+        <!-- THUMBNAIL / COVER ITEM 3 -->
+        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1C3Mye_IzQZzwRgfVJsVGeO2jBaYsat0n')">
             <img src="https://lh3.googleusercontent.com/d/1C3Mye_IzQZzwRgfVJsVGeO2jBaYsat0n" alt="Thumbnail 3" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 03</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
+                <button onclick="toggleDescription('desc-thumb-3')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 03</h3>
+            </div>
+            <div id="desc-thumb-3" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Built a professional video cover emphasizing narrative curiosity and clean graphical balance to drive maximum organic impressions.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/14_AtLV_EJkbRyl53Z8JEjlt1xLna0lhT')">
-          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2">
+        <!-- THUMBNAIL / COVER ITEM 4 -->
+        <div class="showcase-card item-thumbnail glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center p-2 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/14_AtLV_EJkbRyl53Z8JEjlt1xLna0lhT')">
             <img src="https://lh3.googleusercontent.com/d/14_AtLV_EJkbRyl53Z8JEjlt1xLna0lhT" alt="Thumbnail 4" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 04</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">High-CTR Cover</span>
+                <button onclick="toggleDescription('desc-thumb-4')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">High-Engagement YouTube Cover 04</h3>
+            </div>
+            <div id="desc-thumb-4" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Designed a minimalist yet striking thumbnail layout leveraging crisp subject isolation and engaging color depth to maximize feed standout.
+            </div>
           </div>
         </div>
 
-        <!-- POSTER ITEMS -->
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1iZ-Wdj8dA_d0GelfK_N3OpSeUgaltV07')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 1 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1iZ-Wdj8dA_d0GelfK_N3OpSeUgaltV07')">
             <img src="https://lh3.googleusercontent.com/d/1iZ-Wdj8dA_d0GelfK_N3OpSeUgaltV07" alt="AI Poster 1" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 01</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-1')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 01</h3>
+            </div>
+            <div id="desc-poster-1" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Generated a hyper-realistic AI concept poster focusing on futuristic atmospheric lighting, meticulous texture layering, and minimalist aesthetic balance.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/14TaYyn-gYlzO9syUc1h9qLrDlKmxEzQ-')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 2 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/14TaYyn-gYlzO9syUc1h9qLrDlKmxEzQ-')">
             <img src="https://lh3.googleusercontent.com/d/14TaYyn-gYlzO9syUc1h9qLrDlKmxEzQ-" alt="AI Poster 2" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 02</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-2')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 02</h3>
+            </div>
+            <div id="desc-poster-2" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Designed an advanced promotional art piece combining state-of-the-art AI rendering with precise graphic framing for a high-end commercial presentation.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1b32nGghJ6j774CbOpskvzVX_0tV26itm')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 3 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1b32nGghJ6j774CbOpskvzVX_0tV26itm')">
             <img src="https://lh3.googleusercontent.com/d/1b32nGghJ6j774CbOpskvzVX_0tV26itm" alt="AI Poster 3" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 03</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-3')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 03</h3>
+            </div>
+            <div id="desc-poster-3" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Crafted a compelling visual poster integrating cinematic color palettes and intricate design elements tailored for modern digital campaigns.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1J2jjWZF6kvMs1Fi6JvmWgnDcPFsQh2IJ')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 4 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1J2jjWZF6kvMs1Fi6JvmWgnDcPFsQh2IJ')">
             <img src="https://lh3.googleusercontent.com/d/1J2jjWZF6kvMs1Fi6JvmWgnDcPFsQh2IJ" alt="AI Poster 4" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 04</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-4')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 04</h3>
+            </div>
+            <div id="desc-poster-4" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Executed a sophisticated AI-assisted graphic poster emphasizing clean geometrical harmony, depth of field, and striking visual branding.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1sRn56IjyAul2G6zZAC__3hVyAgQjZEY1')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 5 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1sRn56IjyAul2G6zZAC__3hVyAgQjZEY1')">
             <img src="https://lh3.googleusercontent.com/d/1sRn56IjyAul2G6zZAC__3hVyAgQjZEY1" alt="AI Poster 5" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 05</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-5')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 05</h3>
+            </div>
+            <div id="desc-poster-5" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Developed an atmospheric promotional poster featuring rich lighting dynamics and professional compositional balance for creative impact.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/18Pv0NzbdTGLVlGUFnOjrXHm6y_GZ2Qxx')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 6 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/18Pv0NzbdTGLVlGUFnOjrXHm6y_GZ2Qxx')">
             <img src="https://lh3.googleusercontent.com/d/18Pv0NzbdTGLVlGUFnOjrXHm6y_GZ2Qxx" alt="AI Poster 6" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 06</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-6')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 06</h3>
+            </div>
+            <div id="desc-poster-6" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Synthesized futuristic design concepts into a clean, minimal, and high-end promotional poster with tailored textural gradients.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1S8y61INsA0As3_KX8vci8zC5N-pXH18L')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 7 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1S8y61INsA0As3_KX8vci8zC5N-pXH18L')">
             <img src="https://lh3.googleusercontent.com/d/1S8y61INsA0As3_KX8vci8zC5N-pXH18L" alt="AI Poster 7" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 07</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-7')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 07</h3>
+            </div>
+            <div id="desc-poster-7" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Produced an immersive conceptual art piece leveraging refined subject contrast, minimalist framing, and striking visual depth.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1C3lMcrIoTDoFnju6VxrA4Ozn0Dv1Rpdz')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 8 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1C3lMcrIoTDoFnju6VxrA4Ozn0Dv1Rpdz')">
             <img src="https://lh3.googleusercontent.com/d/1C3lMcrIoTDoFnju6VxrA4Ozn0Dv1Rpdz" alt="AI Poster 8" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 08</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-8')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 08</h3>
+            </div>
+            <div id="desc-poster-8" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Designed a professional digital poster utilizing cutting-edge AI generation pipelines, optimized color grading, and clean commercial aesthetics.
+            </div>
           </div>
         </div>
 
-        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1AoIR3hLUDc-Fgh9ttMHCCMbF0oGxanpU')">
-          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3">
+        <!-- POSTER ITEM 9 -->
+        <div class="showcase-card item-poster glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group">
+          <div class="relative aspect-[3/4] w-full bg-slate-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer" onclick="openLightbox('https://lh3.googleusercontent.com/d/1AoIR3hLUDc-Fgh9ttMHCCMbF0oGxanpU')">
             <img src="https://lh3.googleusercontent.com/d/1AoIR3hLUDc-Fgh9ttMHCCMbF0oGxanpU" alt="AI Poster 9" class="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <i data-lucide="maximize-2" class="w-6 h-6 text-white drop-shadow"></i>
             </div>
           </div>
-          <div class="p-4">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
-            <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 09</h3>
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-pink-600 bg-pink-50 px-2 py-0.5 rounded-md">AI Concept Poster</span>
+                <button onclick="toggleDescription('desc-poster-9')" class="p-1.5 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-indigo-600 transition-colors" title="View Description">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm mt-1">Visual Concept Artwork 09</h3>
+            </div>
+            <div id="desc-poster-9" class="desc-drawer text-xs text-slate-600 border-t border-slate-200/80 mt-2">
+              Crafted a high-impact promotional concept artwork combining intricate visual details, crisp lighting, and modern minimalist composition.
+            </div>
           </div>
         </div>
 
@@ -686,6 +878,14 @@
     AOS.init({ once: true, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', offset: 50 });
     lucide.createIcons();
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Toggle Smooth Description Drawer Function
+    function toggleDescription(id) {
+      const drawer = document.getElementById(id);
+      if (drawer) {
+        drawer.classList.toggle('open');
+      }
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
       const heroTitle = document.getElementById('hero-title');
