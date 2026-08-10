@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY Missing' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY environment variable missing' });
   }
 
   const systemPrompt = `
@@ -29,23 +29,35 @@ PORTFOLIO DATA:
 ${siteData}
   `;
 
-  try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    // Official SDK handles the latest endpoint mapping for new keys
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      systemInstruction: systemPrompt 
-    });
+  // Fail-safe active model list (Current Google Active Endpoints)
+  const candidateModels = [
+    "gemini-flash-latest",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-pro-latest"
+  ];
 
-    const result = await model.generateContent(userQuery);
-    const responseText = result.response.text();
+  const genAI = new GoogleGenerativeAI(apiKey);
+  let lastError = null;
 
-    if (responseText) {
-      return res.status(200).json({ reply: responseText.trim() });
-    } else {
-      return res.status(500).json({ error: 'Empty response from Gemini' });
+  for (const modelName of candidateModels) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction: systemPrompt
+      });
+
+      const result = await model.generateContent(userQuery);
+      const responseText = result.response.text();
+
+      if (responseText) {
+        return res.status(200).json({ reply: responseText.trim() });
+      }
+    } catch (err) {
+      lastError = err.message;
+      // Continue trying next active model if 404 occurs
     }
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
   }
+
+  return res.status(500).json({ error: `Connection failed: ${lastError}` });
 }
