@@ -148,18 +148,18 @@
       </div>
     </section>
 
-    <!-- IDENTITY SECTION WITH EMBEDDED TEXT VOICE AGENT -->
+    <!-- IDENTITY SECTION WITH ADVANCED VOICE AGENT -->
     <section id="about" class="py-20 scroll-mt-24">
       <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl shadow-slate-900/5 relative overflow-hidden" data-aos="fade-up" data-aos-duration="1000">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          <!-- Interactive Voice Core Avatar with Dynamic Embedded Text -->
+          <!-- Interactive Voice Core Avatar with Screen Control Intelligence -->
           <div class="lg:col-span-4 flex flex-col items-center justify-center" data-aos="zoom-in" data-aos-duration="1200" data-aos-delay="200">
             <div class="relative group cursor-pointer" onclick="toggleSahilAgent()">
               <!-- Multi-color glowing aura backing -->
               <div class="absolute -inset-3 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-60 blur-xl group-hover:opacity-95 transition duration-700 animate-spin" style="animation-duration: 15s;"></div>
               
-              <!-- Outer Container with Smooth Morphing and Reset -->
+              <!-- Outer Container with Morphing & Smooth Navigation -->
               <div id="jarvis-outer" class="relative w-56 h-56 sm:w-64 sm:h-64 rounded-[32px] bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-900 flex flex-col items-center justify-center p-6 text-center border-4 border-white/90 shadow-2xl overflow-hidden select-none transition-all duration-700 ease-in-out">
                 
                 <!-- Holographic Grid Layer -->
@@ -834,7 +834,6 @@
       const coreIndicator = document.getElementById('jarvis-core-indicator');
 
       if (!isAgentActive) {
-        // Activate Agent
         isAgentActive = true;
         if (boxContent) boxContent.style.opacity = '0';
         setTimeout(() => {
@@ -846,7 +845,6 @@
         sahilHistory.push({ role: 'model', text: greeting });
         speakSahilReply(greeting);
       } else {
-        // Deactivate Agent & Smoothly Restore Initial State
         isAgentActive = false;
         stopSahilListeningState();
         window.speechSynthesis.cancel();
@@ -855,7 +853,6 @@
         setTimeout(() => {
           if (boxContent) {
             boxContent.style.display = 'flex';
-            // Reset to original initial text & styling as requested
             boxContent.innerHTML = `
               <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-white shadow-lg">
                 <i data-lucide="mic" class="w-6 h-6 text-indigo-300"></i>
@@ -940,6 +937,23 @@
         if (data.reply && isAgentActive) {
           sahilHistory.push({ role: 'user', text: userText });
           sahilHistory.push({ role: 'model', text: data.reply });
+          
+          // Advanced Screen & Page Control Handler
+          const replyText = data.reply.toLowerCase();
+          if (replyText.includes('capabilities') || userText.toLowerCase().includes('capabilities')) {
+            if (confirm("Would you like me to take you directly to the Capabilities section?")) {
+              document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
+            }
+          } else if (replyText.includes('identity') || userText.toLowerCase().includes('identity') || userText.toLowerCase().includes('about')) {
+            if (confirm("Would you like me to scroll up to the Identity section?")) {
+              document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+            }
+          } else if (replyText.includes('showcase') || userText.toLowerCase().includes('showcase') || userText.toLowerCase().includes('poster') || userText.toLowerCase().includes('video')) {
+            if (confirm("Would you like me to take you to the Showcase section?")) {
+              document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+
           speakSahilReply(data.reply);
         }
       } catch (err) {
