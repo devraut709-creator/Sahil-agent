@@ -148,19 +148,19 @@
       </div>
     </section>
 
-    <!-- IDENTITY SECTION WITH INTERACTIVE CUBICAL-TO-CIRCLE VOICE AGENT -->
+    <!-- IDENTITY SECTION WITH EMBEDDED TEXT VOICE AGENT -->
     <section id="about" class="py-20 scroll-mt-24">
       <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl shadow-slate-900/5 relative overflow-hidden" data-aos="fade-up" data-aos-duration="1000">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          <!-- Interactive Voice Core Avatar with Cubical Box / Organic Globe State -->
+          <!-- Interactive Voice Core Avatar with Embedded Text Inside Box -->
           <div class="lg:col-span-4 flex flex-col items-center justify-center" data-aos="zoom-in" data-aos-duration="1200" data-aos-delay="200">
             <div class="relative group cursor-pointer" onclick="toggleSahilAgent()">
               <!-- Multi-color glowing aura backing -->
               <div class="absolute -inset-3 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-60 blur-xl group-hover:opacity-95 transition duration-700 animate-spin" style="animation-duration: 15s;"></div>
               
               <!-- Outer Container with Smooth Cubical-to-Circle Transition -->
-              <div id="jarvis-outer" class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-[28px] bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-900 flex items-center justify-center border-4 border-white/90 shadow-2xl overflow-hidden select-none transition-all duration-700 ease-in-out">
+              <div id="jarvis-outer" class="relative w-56 h-56 sm:w-64 sm:h-64 rounded-[32px] bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-900 flex flex-col items-center justify-center p-6 text-center border-4 border-white/90 shadow-2xl overflow-hidden select-none transition-all duration-700 ease-in-out">
                 
                 <!-- Holographic Grid Layer -->
                 <div class="absolute inset-0 opacity-30 pointer-events-none animate-earth-spin">
@@ -169,24 +169,26 @@
                   <div class="absolute left-1/2 inset-y-0 w-px bg-gradient-to-b from-transparent via-purple-300 to-transparent"></div>
                 </div>
 
-                <!-- Inner Element -->
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <!-- Embedded Initial Prompt Content Inside Box -->
+                <div id="box-content" class="relative z-10 flex flex-col items-center justify-center transition-all duration-500">
+                  <div class="w-10 h-10 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 text-white shadow-lg">
+                    <span class="text-base">🎙️</span>
+                  </div>
+                  <h3 class="text-white font-extrabold text-sm sm:text-base tracking-wider uppercase mb-1">
+                    Ask for Sahil
+                  </h3>
+                  <p id="voiceStatusText" class="text-indigo-200 text-xs font-medium">
+                    Click here to talk to Sahil
+                  </p>
+                </div>
+
+                <!-- Inner Element / Core Dot -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-700" id="jarvis-core-indicator">
                   <div id="jarvis-inner" class="relative w-28 h-28 rounded-[20px] border border-indigo-300/50 bg-gradient-to-tr from-indigo-600/30 to-pink-600/30 backdrop-blur-sm transition-all duration-700 ease-in-out flex items-center justify-center shadow-inner">
                     <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)] animate-pulse"></div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- Sleek Professional Prompt Label -->
-            <div class="mt-4 text-center cursor-pointer select-none group" onclick="toggleSahilAgent()">
-              <div class="inline-flex flex-col items-center px-4 py-2 rounded-2xl bg-white/90 border border-indigo-200/85 shadow-md group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
-                <span class="text-xs font-extrabold uppercase tracking-widest text-indigo-600 group-hover:text-white flex items-center gap-1.5">
-                  <span>🎙️</span> ASK FOR SAHIL
-                </span>
-                <span id="voiceStatusText" class="text-[11px] font-medium text-slate-500 group-hover:text-indigo-100 mt-0.5">
-                  Click here to talk to Sahil
-                </span>
               </div>
             </div>
           </div>
@@ -828,14 +830,24 @@
     }
 
     function toggleSahilAgent() {
-      if (isAgentListening) {
-        stopSahilListening();
+      const boxContent = document.getElementById('box-content');
+      const coreIndicator = document.getElementById('jarvis-core-indicator');
+
+      if (!hasAgentGreeted) {
+        // Fade out box text content and reveal voice core indicator
+        if (boxContent) boxContent.style.opacity = '0';
+        setTimeout(() => {
+          if (boxContent) boxContent.style.display = 'none';
+          if (coreIndicator) coreIndicator.style.opacity = '1';
+        }, 300);
+
+        hasAgentGreeted = true;
+        const greeting = "Hey there! I'm Sahil Kumar. Welcome to my portfolio—what high-converting design or video project are we working on today?";
+        sahilHistory.push({ role: 'model', text: greeting });
+        speakSahilReply(greeting);
       } else {
-        if (!hasAgentGreeted) {
-          const greeting = "Hey there! I'm Sahil Kumar. Welcome to my portfolio—what high-converting design or video project are we working on today?";
-          hasAgentGreeted = true;
-          sahilHistory.push({ role: 'model', text: greeting });
-          speakSahilReply(greeting);
+        if (isAgentListening) {
+          stopSahilListening();
         } else {
           startSahilListening();
         }
@@ -844,18 +856,15 @@
 
     function setCubicalState() {
       const outer = document.getElementById('jarvis-outer');
-      const inner = document.getElementById('jarvis-inner');
-      if (!outer || !inner) return;
-      outer.style.borderRadius = '28px';
-      inner.style.borderRadius = '20px';
+      if (!outer) return;
+      outer.style.borderRadius = '32px';
     }
 
     function startVoiceMorphAnimation() {
       clearInterval(morphInterval);
       morphInterval = setInterval(() => {
         const outer = document.getElementById('jarvis-outer');
-        const inner = document.getElementById('jarvis-inner');
-        if (!outer || !inner) return;
+        if (!outer) return;
 
         const f1 = (Math.random() - 0.5) * 30;
         const f2 = (Math.random() - 0.5) * 30;
@@ -865,7 +874,6 @@
         const r4 = Math.round(45 - f2);
 
         outer.style.borderRadius = `${r1}% ${r2}% ${r3}% ${r4}% / ${r4}% ${r1}% ${r2}% ${r3}%`;
-        inner.style.borderRadius = `${r3}% ${r4}% ${r1}% ${r2}% / ${r2}% ${r3}% ${r4}% ${r1}%`;
       }, 180);
     }
 
@@ -877,21 +885,21 @@
     function startSahilListening() {
       isAgentListening = true;
       isAgentProcessing = false;
-      document.getElementById('voiceStatusText').innerText = 'Listening to you... (Click to stop)';
+      const statusText = document.getElementById('voiceStatusText');
+      if (statusText) statusText.innerText = 'Listening to you...';
       startVoiceMorphAnimation();
       try { sahilRecognition.start(); } catch(e){}
     }
 
     function stopSahilListening() {
       isAgentListening = false;
-      document.getElementById('voiceStatusText').innerText = 'Click here to talk to Sahil';
       stopVoiceMorphAnimation();
-      try { sahilRecognition.stop(); } catch(e){}
     }
 
     async function sendQueryToSahilBackend(userText) {
       isAgentProcessing = true;
-      document.getElementById('voiceStatusText').innerText = 'Sahil is thinking...';
+      const statusText = document.getElementById('voiceStatusText');
+      if (statusText) statusText.innerText = 'Sahil is thinking...';
 
       try {
         const response = await fetch('/api/chat', {
@@ -917,7 +925,8 @@
     }
 
     function speakSahilReply(text) {
-      document.getElementById('voiceStatusText').innerText = 'Sahil is speaking...';
+      const statusText = document.getElementById('voiceStatusText');
+      if (statusText) statusText.innerText = 'Sahil is speaking...';
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
