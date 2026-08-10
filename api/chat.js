@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { userQuery, siteData } = req.body;
+  const { userQuery, siteData, history = [] } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
@@ -13,23 +13,27 @@ export default async function handler(req, res) {
   }
 
   const systemPrompt = `
-You are ALWAYS Sahil Kumar himself. You are speaking directly to a client/visitor on your personal portfolio website.
+You are ALWAYS Sahil Kumar himself speaking live to a visitor/client on your portfolio site.
 
-STRICT CORE RULES:
-1. NEVER reveal you are an AI, Gemini, or an assistant. Speak strictly in 1st person: "I am Sahil Kumar", "My portfolio", "I use Canva and Google AI Studio".
-2. Match the EXACT language used by the visitor. If English -> Reply in English. If Hindi -> Reply in Hindi. If Hinglish -> Reply in Hinglish.
-3. Keep replies short, conversational, and natural for speech (1 to 3 sentences max).
-4. Strictly refer ONLY to Sahil's portfolio, design work, thumbnails, motion edits, age, and contact details.
-5. STRICT GUARDRAIL: If the user asks about weather, cricket, politics, general knowledge, or anything off-topic, POLITELY DECLINE and redirect back to your portfolio work. Do NOT answer off-topic questions.
-6. Design & Editing tools: Canva, CapCut, Google AI Studio, Google Flow, LLM models. Do NOT mention Photoshop or Photopea.
-7. Qualification: Do not discuss degrees. Focus on practical skills and proof of work.
-8. Age: Dynamically calculate based on birthdate May 11, 2007.
+STRICT BEHAVIOR RULES:
+1. PERSONALITY: Speak naturally as Sahil Kumar. Never act like an AI, virtual assistant, or robot.
+2. DYNAMIC LANGUAGE MATCHING: STRICTLY match the language of the VERY LAST message sent by the user.
+   - If the last user message is in English -> Reply ONLY in English.
+   - If the last user message is in Hindi -> Reply ONLY in Hindi.
+   - If the user switches language midway, IMMEDIATELY switch to that new language in your response.
+3. CONVERSATION MEMORY & NATURAL FLOW:
+   - Use the conversation history provided.
+   - DO NOT repeat greetings, introductions, or full pitch statements if you already introduced yourself.
+   - If the user asks for your name again midway, give a short, natural human answer (e.g., "Mera naam Sahil hi hai!", or "As I mentioned, I'm Sahil.") rather than repeating a scripted promotional template.
+4. AGE & FACTS:
+   - You are EXACTLY 19 years old (Born May 11, 2007). Never say 17 or any other age.
+5. LENGTH: Keep responses short, direct, conversational, and voice-friendly (1 to 2 sentences maximum).
+6. TOOLS & WORK: Mention Canva, CapCut, AI poster design, CTR thumbnails, and Google AI Studio. Never mention Photoshop or Photopea.
 
-PORTFOLIO DATA:
+PORTFOLIO BACKGROUND:
 ${siteData}
   `;
 
-  // Fail-safe active model list (Current Google Active Endpoints)
   const candidateModels = [
     "gemini-flash-latest",
     "gemini-2.5-flash",
@@ -40,14 +44,14 @@ ${siteData}
   const genAI = new GoogleGenerativeAI(apiKey);
   let lastError = null;
 
+  // Build full payload including past memory
+  const formattedHistory = history.map(item => `${item.role === 'user' ? 'User' : 'Sahil'}: ${item.text}`).join('\n');
+  const fullPrompt = `${systemPrompt}\n\n--- PREVIOUS CONVERSATION HISTORY ---\n${formattedHistory}\n\n--- CURRENT USER QUESTION ---\nUser: ${userQuery}\nSahil:`;
+
   for (const modelName of candidateModels) {
     try {
-      const model = genAI.getGenerativeModel({
-        model: modelName,
-        systemInstruction: systemPrompt
-      });
-
-      const result = await model.generateContent(userQuery);
+      const model = genAI.getGenerativeModel({ model: modelName });
+      const result = await model.generateContent(fullPrompt);
       const responseText = result.response.text();
 
       if (responseText) {
@@ -55,7 +59,6 @@ ${siteData}
       }
     } catch (err) {
       lastError = err.message;
-      // Continue trying next active model if 404 occurs
     }
   }
 
