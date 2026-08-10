@@ -31,7 +31,7 @@
             'blob-pulse': 'blob 10s infinite ease-in-out',
             'float': 'float 6s ease-in-out infinite',
             'earth-spin': 'earthSpin 25s linear infinite',
-            'gradient-shift': 'gradientShift 6s ease infinite',
+            'gradient-flow': 'gradientFlow 4s ease infinite',
           },
           keyframes: {
             blob: {
@@ -46,7 +46,7 @@
               '0%': { transform: 'rotate(0deg)' },
               '100%': { transform: 'rotate(360deg)' },
             },
-            gradientShift: {
+            gradientFlow: {
               '0%': { backgroundPosition: '0% 50%' },
               '50%': { backgroundPosition: '100% 50%' },
               '100%': { backgroundPosition: '0% 50%' },
@@ -84,12 +84,12 @@
       background: #cbd5e1;
       border-radius: 3px;
     }
-    .artistic-name-gradient {
-      background: linear-gradient(-45deg, #4f46e5, #9333ea, #db2777, #2563eb, #4f46e5);
+    .animated-flowing-gradient {
+      background: linear-gradient(270deg, #3b82f6, #9333ea, #ec4899, #ef4444, #3b82f6);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: gradientShift 5s ease infinite;
+      animation: gradientFlow 4s ease infinite;
     }
   </style>
 </head>
@@ -140,7 +140,7 @@
       </div>
 
       <div class="h-20 sm:h-32 md:h-40 lg:h-48 flex items-center justify-center w-full max-w-5xl overflow-hidden px-2" data-aos="zoom-in" data-aos-duration="1200">
-        <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight artistic-name-gradient transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight">
+        <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight animated-flowing-gradient transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 leading-tight">
           PORTFOLIO BY
         </h1>
       </div>
