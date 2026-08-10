@@ -1,3 +1,5 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -7,7 +9,7 @@ export default async function handler(req, res) {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY environment variable missing' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY Missing' });
   }
 
   const systemPrompt = `
@@ -27,38 +29,23 @@ PORTFOLIO DATA:
 ${siteData}
   `;
 
-  // List of active endpoints to fallback dynamically
-  const modelsToTry = [
-    'gemini-2.0-flash',
-    'gemini-1.5-flash-latest',
-    'gemini-1.5-pro'
-  ];
+  try {
+    const genAI = new GoogleGenerativeAI(apiKey);
+    // Official SDK handles the latest endpoint mapping for new keys
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      systemInstruction: systemPrompt 
+    });
 
-  for (const model of modelsToTry) {
-    try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: `${systemPrompt}\n\nUSER QUESTION: ${userQuery}` }]
-            }
-          ]
-        })
-      });
+    const result = await model.generateContent(userQuery);
+    const responseText = result.response.text();
 
-      const data = await response.json();
-
-      if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-        const reply = data.candidates[0].content.parts[0].text.trim();
-        return res.status(200).json({ reply });
-      }
-    } catch (e) {
-      continue;
+    if (responseText) {
+      return res.status(200).json({ reply: responseText.trim() });
+    } else {
+      return res.status(500).json({ error: 'Empty response from Gemini' });
     }
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
-
-  return res.status(500).json({ error: 'Failed to connect to active Gemini model' });
 }
