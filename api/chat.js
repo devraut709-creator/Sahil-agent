@@ -1,15 +1,13 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { userQuery, siteData, history = [] } = req.body;
-  const apiKey = process.env.GEMINI_API_KEY;
+  const groqApiKey = process.env.GROQ_API_KEY;
 
-  if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY missing' });
+  if (!groqApiKey) {
+    return res.status(500).json({ error: 'GROQ_API_KEY missing in Vercel settings' });
   }
 
   const systemPrompt = `
@@ -21,47 +19,56 @@ STRICT BEHAVIOR RULES:
    - If user message is in English -> Reply ONLY in English.
    - If user message is in Hindi -> Reply ONLY in Hindi.
 3. CONVERSATION MEMORY:
-   - Use provided history. Never repeat full sales intro templates if you already greeted the user.
+   - Use the provided history. Never repeat full sales intro templates if you already greeted the user.
 4. AGE & FACTS:
    - You are EXACTLY 19 years old (Born May 11, 2007).
-5. LENGTH: Keep responses short (1 to 2 sentences max).
-6. TOOLS: Mention Canva, CapCut, AI poster design, CTR thumbnails, Google AI Studio. Never mention Photoshop or Photopea.
+5. LENGTH: Keep responses short, direct, conversational, and voice-friendly (1 to 2 sentences maximum).
+6. TOOLS & WORK: Mention Canva, CapCut, AI poster design, CTR thumbnails, and Google AI Studio. Never mention Photoshop or Photopea.
 
 PORTFOLIO BACKGROUND:
 ${siteData}
   `;
 
-  const candidateModels = [
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-flash-latest"
+  // Build full message chain for Groq
+  const messages = [
+    { role: "system", content: systemPrompt }
   ];
 
-  const genAI = new GoogleGenerativeAI(apiKey);
-  let isRateLimited = false;
+  // Append history
+  history.slice(-6).forEach(item => {
+    messages.push({
+      role: item.role === 'user' ? 'user' : 'assistant',
+      content: item.text
+    });
+  });
 
-  const formattedHistory = history.slice(-4).map(item => `${item.role === 'user' ? 'User' : 'Sahil'}: ${item.text}`).join('\n');
-  const fullPrompt = `${systemPrompt}\n\n--- HISTORY ---\n${formattedHistory}\n\n--- CURRENT USER QUESTION ---\nUser: ${userQuery}\nSahil:`;
+  // Append current user query
+  messages.push({ role: "user", content: userQuery });
 
-  for (const modelName of candidateModels) {
-    try {
-      const model = genAI.getGenerativeModel({ model: modelName });
-      const result = await model.generateContent(fullPrompt);
-      const responseText = result.response.text();
+  try {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${groqApiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: messages,
+        temperature: 0.6,
+        max_tokens: 150
+      })
+    });
 
-      if (responseText) {
-        return res.status(200).json({ reply: responseText.trim() });
-      }
-    } catch (err) {
-      if (err.message && (err.message.includes('429') || err.message.includes('Quota exceeded'))) {
-        isRateLimited = true;
-      }
+    const data = await response.json();
+
+    if (data.choices && data.choices.length > 0) {
+      const reply = data.choices[0].message.content.trim();
+      return res.status(200).json({ reply });
+    } else {
+      return res.status(200).json({ reply: "Aapki awaaz thodi kat gayi thi, kya aap dobara bolenge?" });
     }
+  } catch (err) {
+    return res.status(200).json({ reply: "नेटवर्क में थोड़ा डिस्टर्बेंस है, कृपया एक बार फिर बोलिए।" });
   }
-
-  if (isRateLimited) {
-    return res.status(429).json({ error: "Google Free API quota limit reached. Please wait 60 seconds before speaking again." });
-  }
-
-  return res.status(500).json({ error: "Connection issue with Gemini servers. Please try again." });
 }
