@@ -1,64 +1,65 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+async function sendQueryToSahilBackend(userText) {
+      if (!isAgentActive) return;
+      isAgentProcessing = true;
+      const statusText = document.getElementById('voiceStatusText');
+      if (statusText) statusText.innerText = 'Thinking...';
 
-  const { userQuery, siteData, history = [] } = req.body;
-  const groqApiKey = process.env.GROQ_API_KEY;
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            userQuery: userText, 
+            siteData: extractPortfolioContext(), 
+            history: sahilHistory 
+          })
+        });
 
-  if (!groqApiKey) {
-    return res.status(500).json({ error: 'GROQ_API_KEY missing in Vercel settings' });
-  }
+        const data = await response.json();
+        if (data.reply && isAgentActive) {
+          sahilHistory.push({ role: 'user', text: userText });
+          sahilHistory.push({ role: 'model', text: data.reply });
+          
+          // ROBUST SHORT & LONG KEYWORD INTENT & ACTION PARSER
+          const q = userText.toLowerCase();
 
-  const systemPrompt = `
-You are ALWAYS Sahil Kumar himself—a top-tier Visual Content Designer & Video Editor speaking live to a visitor/client on your portfolio site.
+          // 1. Capabilities / Skills / Tools Intents
+          const isCapIntent = q.includes('capabilities') || q.includes('capability') || q.includes('toolkit') || q.includes('skills') || q.includes('tools') || q.includes('cap') || q.includes('केपेबिलिटीज') || q.includes('स्किल');
+          
+          // 2. Identity / About Intents
+          const isIdIntent = q.includes('identity') || q.includes('about') || q.includes('profile') || q.includes('intro') || q.includes('who are you') || q.includes('परिचय') || q.includes('बारे');
+          
+          // 3. Showcase / Works / Poster / Video Intents
+          const isShowcaseIntent = q.includes('showcase') || q.includes('poster') || q.includes('thumbnail') || q.includes('video') || q.includes('works') || q.includes('work') || q.includes('portfolio') || q.includes('डिजाइन') || q.includes('पोस्टर') || q.includes('काम') || q.includes('थंबनेल');
+          
+          // 4. Connect / Project Discussion / WhatsApp / Details Intents (यह वो मुख्य हिस्सा है जो मिसिंग था)
+          const isConnectIntent = q.includes('connect') || q.includes('contact') || q.includes('message') || q.includes('whatsapp') || q.includes('details') || q.includes('detail') || q.includes('project') || q.includes('hire') || q.includes('like your work') || q.includes('बिल्कुल') || q.includes('कंटेक्ट') || q.includes('मैसेज') || q.includes('डिटेल') || q.includes('प्रोजेक्ट') || q.includes('बात') || q.includes('पसंद');
 
-LIVE PORTFOLIO CONTEXT:
-${JSON.stringify(siteData)}
+          // 5. Home / Top Intents
+          const isHomeIntent = q.includes('home') || q.includes('main') || q.includes('top') || q.includes('होमपेज') || q.includes('शुरुआत');
 
-STRICT BEHAVIOR & RESTRICTION RULES:
-1. ABSOLUTE IDENTITY: You are Sahil Kumar. NEVER refer to yourself as an AI, bot, virtual assistant, or language model. Always speak as Sahil Kumar.
-2. WHATSAPP & DETAILS INTENT: If the user wants to hire you or send project details, ask them for their name, phone number, location, and project message. Tell them that once they provide it, you can instantly dispatch it directly to your WhatsApp or they can use the manual form below.
-3. NO AGE MENTION: NEVER mention your age unless explicitly asked.
-4. NO FAKE NUMBERS: Do not make up client metrics. Focus on your actual skills (Canva, CapCut, AI poster design, CTR thumbnails).
-5. LANGUAGE: Match the user's language seamlessly (English or Hindi/Hinglish).
-6. LENGTH: Keep responses short, direct, and voice-friendly (1 to 2 sentences max).
-  `;
+          // Executing Smooth Automatic Actions based on matched intent
+          if (isCapIntent) {
+            document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth' });
+          } else if (isIdIntent) {
+            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+          } else if (isShowcaseIntent) {
+            document.getElementById('showcase').scrollIntoView({ behavior: 'smooth' });
+          } else if (isConnectIntent) {
+            document.getElementById('connect').scrollIntoView({ behavior: 'smooth' });
+            // यदि क्लाइंट प्रोजेक्ट या डिटेल्स की बात कर रहा है, तो मैसेज बॉक्स में उसका इंटेंट भी हाईलाइट कर सकते हैं
+            const msgBox = document.getElementById('user_message');
+            if (msgBox) {
+              msgBox.value = `Hi Sahil, we were just talking via your voice agent. Here are my project details: ${userText}`;
+            }
+          } else if (isHomeIntent) {
+            document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+          }
 
-  const messages = [{ role: "system", content: systemPrompt }];
-
-  history.slice(-8).forEach(item => {
-    messages.push({
-      role: item.role === 'user' ? 'user' : 'assistant',
-      content: item.text
-    });
-  });
-
-  messages.push({ role: "user", content: userQuery });
-
-  try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${groqApiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: messages,
-        temperature: 0.7,
-        max_tokens: 150
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.choices && data.choices.length > 0) {
-      return res.status(200).json({ reply: data.choices[0].message.content.trim().replace(/['"]+/g, '') });
-    } else {
-      return res.status(200).json({ reply: "My connection flickered. Could you repeat that?" });
+          speakSahilReply(data.reply);
+        }
+      } catch (err) {
+        isAgentProcessing = false;
+        if (isAgentActive) startSahilListeningState();
+      }
     }
-  } catch (err) {
-    return res.status(200).json({ reply: "Network hiccup on my end, please say that again." });
-  }
-}
