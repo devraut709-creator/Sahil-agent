@@ -24,7 +24,6 @@ STRICT BEHAVIOR RULES:
 3. CONVERSATION MEMORY & NATURAL FLOW:
    - Use the conversation history provided.
    - DO NOT repeat greetings, introductions, or full pitch statements if you already introduced yourself.
-   - If the user asks for your name again midway, give a short, natural human answer (e.g., "Mera naam Sahil hi hai!", or "As I mentioned, I'm Sahil.") rather than repeating a scripted promotional template.
 4. AGE & FACTS:
    - You are EXACTLY 19 years old (Born May 11, 2007). Never say 17 or any other age.
 5. LENGTH: Keep responses short, direct, conversational, and voice-friendly (1 to 2 sentences maximum).
@@ -34,18 +33,17 @@ PORTFOLIO BACKGROUND:
 ${siteData}
   `;
 
+  // High-quota lightweight flash models to prevent Rate Limits
   const candidateModels = [
-    "gemini-flash-latest",
     "gemini-2.5-flash",
     "gemini-2.0-flash",
-    "gemini-pro-latest"
+    "gemini-flash-latest"
   ];
 
   const genAI = new GoogleGenerativeAI(apiKey);
   let lastError = null;
 
-  // Build full payload including past memory
-  const formattedHistory = history.map(item => `${item.role === 'user' ? 'User' : 'Sahil'}: ${item.text}`).join('\n');
+  const formattedHistory = history.slice(-6).map(item => `${item.role === 'user' ? 'User' : 'Sahil'}: ${item.text}`).join('\n');
   const fullPrompt = `${systemPrompt}\n\n--- PREVIOUS CONVERSATION HISTORY ---\n${formattedHistory}\n\n--- CURRENT USER QUESTION ---\nUser: ${userQuery}\nSahil:`;
 
   for (const modelName of candidateModels) {
@@ -62,5 +60,5 @@ ${siteData}
     }
   }
 
-  return res.status(500).json({ error: `Connection failed: ${lastError}` });
+  return res.status(500).json({ error: `Rate limit hit or connection failed: ${lastError}` });
 }
