@@ -65,11 +65,11 @@
 <script>
   let isListening = false;
   let isProcessing = false;
+  let hasGreeted = false;
   let recognition;
   let conversationHistory = [];
   let availableVoices = [];
 
-  // Pre-load voices on browser startup
   function loadVoices() {
     availableVoices = window.speechSynthesis.getVoices();
   }
@@ -122,7 +122,16 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
     if (isListening) {
       stopListening();
     } else {
-      startListening();
+      if (!hasGreeted) {
+        // High-converting English initial greeting
+        const initialGreeting = "Hey there! I'm Sahil Kumar. Welcome to my portfolio—what high-converting design or video project are we working on today?";
+        hasGreeted = true;
+        log(`> Sahil: ${initialGreeting}`);
+        conversationHistory.push({ role: 'model', text: initialGreeting });
+        speakReply(initialGreeting);
+      } else {
+        startListening();
+      }
     }
   }
 
@@ -180,10 +189,8 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
 
     const utterance = new SpeechSynthesisUtterance(text);
     
-    // Check if reply contains Hindi characters
     const isHindi = /[\u0900-\u097F]/.test(text);
     
-    // Ensure list is refreshed
     if (availableVoices.length === 0) {
       availableVoices = window.speechSynthesis.getVoices();
     }
@@ -192,7 +199,6 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
 
     if (isHindi) {
       utterance.lang = 'hi-IN';
-      // Priority for Native Indian Hindi voices (Google/Microsoft/Apple Hindi)
       selectedVoice = availableVoices.find(v => 
         v.lang === 'hi-IN' || 
         v.lang === 'hi_IN' || 
@@ -200,8 +206,7 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
         v.name.includes('Google हिन्दी')
       );
     } else {
-      utterance.lang = 'en-IN'; // Set Indian English for natural accent
-      // Priority for Indian English accent
+      utterance.lang = 'en-IN';
       selectedVoice = availableVoices.find(v => 
         v.lang === 'en-IN' || 
         v.lang === 'en_IN' || 
@@ -213,7 +218,6 @@ Philosophy: Focuses on practical skills, visual perfection, and speed rather tha
       utterance.voice = selectedVoice;
     }
 
-    // Natural Indian pitch and speed adjustment
     utterance.rate = 1.0; 
     utterance.pitch = 1.0;
 
