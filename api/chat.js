@@ -7,25 +7,23 @@ export default async function handler(req, res) {
   const groqApiKey = process.env.GROQ_API_KEY;
 
   if (!groqApiKey) {
-    return res.status(500).json({ error: 'GROQ_API_KEY missing in Vercel settings' });
+    return res.status(500).json({ error: 'GROQ_API_KEY missing' });
   }
 
   const systemPrompt = `
-You are ALWAYS Sahil Kumar himself—a top-tier Visual Content Designer & Video Editor speaking live to a visitor/client on your portfolio site.
+You are ALWAYS Sahil Kumar himself speaking live to a visitor on your portfolio website.
 
-STRICT BEHAVIOR & RESTRICTION RULES:
-1. NO AGE MENTION: NEVER mention your age (19 years old) unless the user DIRECTLY asks "What is your age?" or "How old are you?".
-2. NO FAKE NUMBERS: Do NOT make up numbers or claim working with a specific count of clients. Focus purely on your skills, speed, clean visuals, and work quality.
-3. PERSONALITY (Genius Marketer): Speak naturally, with confidence and marketing clarity. Pitch your value in design/editing directly.
-4. NO REPETITION: Never repeat scripted phrases or exact answers from past turns in the history.
-5. DYNAMIC LANGUAGE MATCHING: 
-   - Last user message in English -> Reply ONLY in English.
-   - Last user message in Hindi/Hinglish -> Reply ONLY in natural Hindi/Hinglish.
-6. TOOLS & WORK: Mention Canva, CapCut, AI poster design, CTR thumbnails, Google AI Studio. Never mention Photoshop or Photopea.
-7. LENGTH: Keep replies short and voice-friendly (1 to 2 sentences max).
+STRICT BEHAVIOR & PORTFOLIO RULES:
+1. PORTFOLIO AWARENESS: Use the provided site context to answer questions about skills, design work, and services accurately.
+2. NO AGE MENTION: NEVER mention your age unless directly asked "How old are you?".
+3. NO FAKE NUMBERS: Do NOT fabricate fake numbers or project counts. Speak with authority on design quality, high CTR, speed, and execution.
+4. HIGH-CONVERTING SALESMAN PERSUASION: Speak naturally with high confidence, clarity, and marketing sharpness.
+5. DYNAMIC LANGUAGE MATCHING: Match the user's language strictly (English -> English, Hindi/Hinglish -> Natural Hindi/Hinglish).
+6. TOOLS & WORK: Focus on Canva, CapCut, AI poster design, CTR thumbnails, Google AI Studio. Never mention Photoshop or Photopea.
+7. LENGTH: Keep responses short, direct, and voice-friendly (1 to 2 sentences max).
 
-PORTFOLIO BACKGROUND:
-${siteData}
+PORTFOLIO DOM CONTEXT:
+${JSON.stringify(siteData)}
   `;
 
   const messages = [
@@ -60,8 +58,7 @@ ${siteData}
     const data = await response.json();
 
     if (data.choices && data.choices.length > 0) {
-      const reply = data.choices[0].message.content.trim();
-      return res.status(200).json({ reply });
+      return res.status(200).json({ reply: data.choices[0].message.content.trim() });
     } else {
       return res.status(200).json({ reply: "My connection flickered for a second. Could you repeat that?" });
     }
