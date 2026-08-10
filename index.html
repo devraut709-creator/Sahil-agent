@@ -1,229 +1,176 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sahil AI - Serverless Agent Test Bench</title>
+  <title>Sahil AI - Voice Agent</title>
   <style>
     body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #0f172a;
-      color: #fff;
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       min-height: 100vh;
       margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
     }
     .card {
       background: #1e293b;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      max-width: 500px;
-      width: 100%;
+      padding: 2rem;
+      border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
     }
+    h1 { margin-bottom: 1rem; font-size: 1.5rem; }
     button {
-      background: #4f46e5;
+      background: #6366f1;
       color: white;
       border: none;
-      padding: 15px 30px;
-      font-size: 16px;
+      padding: 12px 24px;
+      font-size: 1rem;
       font-weight: bold;
-      border-radius: 50px;
+      border-radius: 30px;
       cursor: pointer;
-      margin-bottom: 20px;
-      transition: background 0.3s;
+      transition: 0.2s;
     }
-    button:hover { background: #4338ca; }
-    .status {
-      font-size: 15px;
-      font-weight: 600;
-      color: #34d399;
-      margin-bottom: 15px;
-    }
-    .log-box {
+    button:hover { background: #4f46e5; }
+    button.active { background: #ef4444; }
+    .status { margin: 1rem 0; font-weight: 500; color: #38bdf8; }
+    .logs {
       background: #090d16;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 10px;
+      border-radius: 8px;
+      padding: 1rem;
       height: 250px;
       overflow-y: auto;
       text-align: left;
+      font-size: 0.85rem;
       font-family: monospace;
-      font-size: 12px;
-      color: #94a3b8;
+      color: #cbd5e1;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
 
 <div class="card">
-  <h2>Sahil AI - Serverless Fast Agent</h2>
-  <button id="start-btn" onclick="toggleTest()">Start Voice Test</button>
-  <div id="status" class="status">Status: Idle</div>
-  <div id="log" class="log-box">Logs will appear here...</div>
-</div>
-
-<!-- HIDDEN DOM FOR PORTFOLIO CONTEXT -->
-<div id="portfolio-content" style="display:none;">
-  <h1>Sahil Kumar Portfolio</h1>
-  <p>Bio: I am Sahil Kumar, born May 11, 2007. Visual content designer, video editor, and AI workflow specialist based in India.</p>
-  <p>Design & AI Tools: Canva, Google AI Studio, Google Flow, LLM Models, and Generative AI for High-CTR Thumbnails and AI Concept Posters.</p>
-  <p>Video Editing Tools: CapCut for Motion Video Editing.</p>
-  <p>Projects: 17+ total projects including Motion Sequences, Covers, and AI Posters.</p>
-  <p>Note: No Photoshop or Photopea. No qualification or degree discussion; focus on practical execution.</p>
+  <h1>Sahil AI - Serverless Voice Agent</h1>
+  <button id="toggleBtn" onclick="toggleAgent()">Start Test</button>
+  <div class="status" id="statusText">Status: Idle</div>
+  <div class="logs" id="logBox">> Logs will appear here...</div>
 </div>
 
 <script>
-  let isRunning = false;
-  let recognition = null;
-  let synth = window.speechSynthesis;
-  let isSpeaking = false;
+  let isListening = false;
+  let recognition;
+  let conversationHistory = []; // Keeps track of conversation memory
 
-  function log(msg) {
-    const logBox = document.getElementById('log');
-    logBox.innerHTML += `<div>> ${msg}</div>`;
-    logBox.scrollTop = logBox.scrollHeight;
-  }
+  const siteData = `
+Name: Sahil Kumar
+Role: Visual Content Designer & Video Editor
+Age: 19 years old (Born May 11, 2007)
+Location: India
+Primary Skills: AI Posters, High-CTR Thumbnails, CapCut Motion Video Editing, Short-form reels.
+Tools Used: Canva, CapCut, Google AI Studio, LLM Workflows.
+Experience & Projects: Completed over 17 visual and video editing projects for clients.
+Philosophy: Focuses on practical skills, visual perfection, and speed rather than formal degrees.
+`;
 
-  function setStatus(text, color = '#34d399') {
-    const st = document.getElementById('status');
-    st.textContent = "Status: " + text;
-    st.style.color = color;
-  }
-
-  function getWebsiteContext() {
-    return document.getElementById('portfolio-content').innerText;
-  }
-
-  function initEngine() {
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("Please use Google Chrome.");
-      return null;
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    recognition.onresult = async (event) => {
+      const lastIndex = event.results.length - 1;
+      const transcript = event.results[lastIndex][0].transcript.trim();
+      
+      log(`> User Said: ${transcript}`);
+      stopListening();
+      
+      await sendToBackend(transcript);
+    };
+
+    recognition.onerror = (err) => {
+      log(`> Speech Error: ${err.error}`);
+    };
+  } else {
+    alert('Speech Recognition is not supported in this browser.');
+  }
+
+  function toggleAgent() {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
     }
-
-    const rec = new SpeechRecognition();
-    rec.continuous = false;
-    rec.interimResults = false;
-    rec.lang = 'hi-IN';
-
-    rec.onstart = () => {
-      setStatus("Listening... (Speak naturally)", "#38bdf8");
-    };
-
-    rec.onresult = (event) => {
-      const userSpeech = event.results[0][0].transcript.trim();
-      log("User Said: " + userSpeech);
-      callBackend(userSpeech);
-    };
-
-    rec.onerror = (e) => {
-      if (e.error !== 'no-speech' && e.error !== 'aborted') {
-        log("Mic Status: " + e.error);
-      }
-      if (isRunning && !isSpeaking) {
-        restartListening(300);
-      }
-    };
-
-    rec.onend = () => {
-      if (isRunning && !isSpeaking) {
-        restartListening(300);
-      }
-    };
-
-    return rec;
   }
 
   function startListening() {
-    if (!isRunning || isSpeaking) return;
-    if (!recognition) recognition = initEngine();
-
-    try { recognition.start(); } catch(e) { restartListening(300); }
+    isListening = true;
+    document.getElementById('toggleBtn').innerText = 'Stop Test';
+    document.getElementById('toggleBtn').classList.add('active');
+    document.getElementById('statusText').innerText = 'Status: Listening... (Speak naturally)';
+    try { recognition.start(); } catch(e){}
   }
 
-  function restartListening(delay) {
-    setTimeout(() => {
-      if (isRunning && !isSpeaking) startListening();
-    }, delay);
+  function stopListening() {
+    isListening = false;
+    document.getElementById('toggleBtn').innerText = 'Start Test';
+    document.getElementById('toggleBtn').classList.remove('active');
+    document.getElementById('statusText').innerText = 'Status: Processing...';
+    try { recognition.stop(); } catch(e){}
   }
 
-  async function callBackend(userQuery) {
-    setStatus("Sahil Thinking...", "#eab308");
-    const siteData = getWebsiteContext();
-
+  async function sendToBackend(userText) {
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userQuery, siteData })
+        body: JSON.stringify({ 
+          userQuery: userText, 
+          siteData: siteData,
+          history: conversationHistory 
+        })
       });
 
       const data = await response.json();
 
       if (data.reply) {
-        speak(data.reply);
+        log(`> Sahil: ${data.reply}`);
+        
+        // Update local history memory
+        conversationHistory.push({ role: 'user', text: userText });
+        conversationHistory.push({ role: 'model', text: data.reply });
+
+        speakReply(data.reply);
       } else {
-        log("Backend Error: " + (data.error || "Unknown error"));
-        speak("I had a quick connection issue. Please speak again.");
+        log(`> Backend Error: ${data.error}`);
+        speakReply("I had a quick connection issue. Please speak again.");
       }
     } catch (err) {
-      log("Fetch Error: " + err.message);
-      speak("Network error. Please try again.");
+      log(`> Network Error: ${err.message}`);
     }
   }
 
-  function speak(text) {
-    if (!synth) return;
-    if (recognition) { try { recognition.abort(); } catch(e){} }
-
-    synth.cancel();
-
-    const utter = new SpeechSynthesisUtterance(text);
-    const isEnglish = /^[a-zA-Z0-9\s?.,'!]+$/.test(text);
-    utter.lang = isEnglish ? 'en-US' : 'hi-IN';
-    utter.rate = 1.0;
-
-    utter.onstart = () => {
-      isSpeaking = true;
-      setStatus("Sahil Speaking...", "#f43f5e");
-      log("Sahil: " + text);
+  function speakReply(text) {
+    document.getElementById('statusText').innerText = 'Status: Sahil Speaking...';
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    utterance.onend = () => {
+      startListening();
     };
 
-    utter.onend = () => {
-      isSpeaking = false;
-      setStatus("Listening... (Speak naturally)", "#38bdf8");
-      restartListening(200);
-    };
-
-    utter.onerror = () => {
-      isSpeaking = false;
-      restartListening(200);
-    };
-
-    synth.speak(utter);
+    window.speechSynthesis.speak(utterance);
   }
 
-  function toggleTest() {
-    const btn = document.getElementById('start-btn');
-    if (!isRunning) {
-      isRunning = true;
-      btn.textContent = "Stop Test";
-      log("Serverless Engine Active");
-      speak("Hello! I am Sahil Kumar. Feel free to ask me anything about my portfolio or work.");
-    } else {
-      isRunning = false;
-      btn.textContent = "Start Voice Test";
-      if (synth) synth.cancel();
-      if (recognition) { try { recognition.abort(); } catch(e){} }
-      setStatus("Stopped", "#ef4444");
-      log("Test Stopped");
-    }
+  function log(msg) {
+    const box = document.getElementById('logBox');
+    box.innerText += `\n${msg}`;
+    box.scrollTop = box.scrollHeight;
   }
 </script>
 
